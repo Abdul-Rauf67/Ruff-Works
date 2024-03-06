@@ -1,18 +1,42 @@
 package com.example.agrilinkup
 
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val TabTitles= arrayOf("Home","Chats","Cart","Profile")
+        val TabIcons=arrayOf(R.drawable.home_icon,R.drawable.chats_icon,R.drawable.shipping_cart_icon,R.drawable.mange_account_icon)
 
+        val viewPager2=findViewById<ViewPager2>(R.id.ViewpagerTwo)
+        val layoutTab=findViewById<TabLayout>(R.id.tabLayout)
+
+        val adapter=ViewPagerAdapter(supportFragmentManager,lifecycle)
+        viewPager2.adapter=adapter
+
+        TabLayoutMediator(layoutTab,viewPager2){tab,position ->
+            tab.text=TabTitles[position]
+            tab.setIcon(TabIcons[position])
+               /* when(position){
+                1->R.drawable.chats_icon
+                else -> R.drawable.home_icon
+                }
+                */
+        }.attach()
+
+/*
         var bottomNavigationBar=findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
 
         bottomNavigationBar.setOnItemReselectedListener {
@@ -24,9 +48,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
+*/
     }
+
+    /*
     fun homeFragment(){
             val fragmentManager: FragmentManager = supportFragmentManager
 
@@ -121,4 +146,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
 
     }
+
+
+     */
 }
