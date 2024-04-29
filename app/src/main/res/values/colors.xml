@@ -4,6 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#5BCD5F</color>
     <color name="pink">#C55ED6</color>
+    <color name="colorPrimary">#2D383F</color>
+    <color name="violet">#112732</color>
+    <color name="main_bg_color">#68534C</color>
     <color name="orange">#CFA834</color>
     <color name="red">#C15076</color>
 </resources>
