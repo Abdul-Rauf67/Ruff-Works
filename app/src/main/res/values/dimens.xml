@@ -1,0 +1,42 @@
+<resources>
+    <!-- Title -->
+    <dimen name="title_horizontal_margin">10dp</dimen>
+    <dimen name="title_vertical_margin">50dp</dimen>
+    <dimen name="title_size">50sp</dimen>
+
+    <!-- Activity -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">15dp</dimen>
+
+    <!-- Fragments -->
+    <dimen name="fragment_horizontal_margin">15dp</dimen>
+    <dimen name="fragment_vertical_margin">15dp</dimen>
+    <dimen name="frag_title_size">38sp</dimen>
+    <dimen name="frag_title_horizontal_margin">10dp</dimen>
+    <dimen name="frag_title_vertical_margin">20dp</dimen>
+
+    <!-- CardView -->
+    <dimen name="card_view_vertical_margin">10dp</dimen>
+    <dimen name="card_view_corner_radius">20dp</dimen>
+    <dimen name="card_view_elevation">10dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="btn_vertical_margin">16dp</dimen>
+    <dimen name="error_vertical_margin">15dp</dimen>
+    <dimen name="spacing_margin">10dp</dimen>
+    <dimen name="progress_margin">120dp</dimen>
+    <dimen name="product_vertical_margin">5dp</dimen>
+    <dimen name="product_horizontal_margin">10dp</dimen>
+    <dimen name="message_margin">3dp</dimen>
+    <dimen name="message_padding">15dp</dimen>
+
+    <!-- Font Size -->
+    <dimen name="edit_text_font_size">18sp</dimen>
+    <dimen name="content_font_size">18sp</dimen>
+    <dimen name="detail_font_size">11sp</dimen>
+
+    <!-- Height -->
+    <dimen name="image_height">240dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

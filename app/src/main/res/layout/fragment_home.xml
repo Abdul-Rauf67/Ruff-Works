@@ -1,16 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink"
-    tools:context=".HomeFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="15dp"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:gravity="center"
+        android:id="@+id/txtTitleProducts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Its Time cannot loaded the Home" />
+        android:layout_height="wrap_content"
+        android:text="@string/title_fragment_products"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/frag_title_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtInputSearch" />
 
-</FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtInputSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTitleProducts"
+        android:layout_marginBottom="@dimen/spacing_margin"
+        tools:ignore="MissingConstraints">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/txtFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtInputSearch"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchProducts"
+        tools:layout_editor_absoluteX="27dp" />
+
+    <TextView
+        android:id="@+id/txtHomeError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtFilter"
+        android:textColor="@color/colorError"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/error_vertical_margin"
+        tools:ignore="MissingConstraints" />
+
+
+    <ProgressBar
+        android:foregroundGravity="center"
+        android:id="@+id/progProducts"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="9dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/txtHomeError"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtHomeError"
+        app:layout_constraintTop_toBottomOf="@+id/txtFilter"
+        tools:layout_editor_absoluteX="-36dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <EditText
+        android:id="@+id/txtSearchProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_product_search"
+        android:inputType="text"
+        android:textSize="@dimen/edit_text_font_size"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitleProducts"
+        tools:layout_editor_absoluteX="15dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/baseline_add_24"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
