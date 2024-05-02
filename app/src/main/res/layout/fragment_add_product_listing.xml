@@ -217,6 +217,14 @@
                     android:text="@string/action_product_sell"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/btn_vertical_margin"
+                    android:text="Cancel"
+                    android:textStyle="bold" />
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

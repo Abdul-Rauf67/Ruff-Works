@@ -50,19 +50,17 @@ class AddProductListingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSell.setOnClickListener {
-
-            binding.fragmentAddProductListing.visibility = View.INVISIBLE
-            val fragmentTansaction = childFragmentManager.beginTransaction()
-            fragmentTansaction.replace(R.id.fragmentAddProdusts_Container, HomeFragment())
-            fragmentTansaction.addToBackStack(null)
-            fragmentTansaction.commit()
-
-
-
+        binding.cancel.setOnClickListener {
+            bactToHomeFragment()
         //findNavController().navigate(R.id.action_addProductListingFragment_to_homeFragment)
         }
-
+    }
+    fun bactToHomeFragment(){
+        binding.fragmentAddProductListing.visibility = View.INVISIBLE
+        val fragmentTansaction = childFragmentManager.beginTransaction()
+        fragmentTansaction.replace(R.id.fragmentAddProdusts_Container, HomeFragment())
+        fragmentTansaction.addToBackStack(null)
+        fragmentTansaction.commit()
     }
 
 
