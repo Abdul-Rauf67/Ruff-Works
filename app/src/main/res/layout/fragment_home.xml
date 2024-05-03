@@ -74,6 +74,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeView"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtHomeError"
@@ -98,6 +99,63 @@
             android:inputType="text"
             android:textSize="@dimen/edit_text_font_size"
             app:layout_constraintTop_toBottomOf="@+id/txtTitleProducts"
+            tools:layout_editor_absoluteX="15dp" />
+
+        <include
+            android:id="@+id/item1"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/txtFilter"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item2"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item1"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item3"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item2"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item4"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item3"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item5"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item4"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item6"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item5"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item7"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item6"
+            tools:layout_editor_absoluteX="15dp" />
+        <include
+            android:id="@+id/item8"
+            layout="@layout/product_listing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/item7"
             tools:layout_editor_absoluteX="15dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
