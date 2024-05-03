@@ -7,69 +7,69 @@
 
     </data>
 
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        tools:context=".NavigationDrawerActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start">
+
+        <include
+            layout="@layout/app_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_hader"
+            app:menu="@menu/nav_menu" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+
+
+
+
+
+
+<!--
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <androidx.viewpager2.widget.ViewPager2
+
+        <include
+            android:id="@+id/app_bar_main"
+            layout="@layout/app_bar_main"
             android:layout_width="match_parent"
-            android:id="@+id/ViewpagerTwo"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent" />
 
 
-        <!--
-            <FrameLayout
-                android:id="@+id/host"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        -->
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_chating"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="MissingConstraints">
-
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/home_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home" />
-
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/chats_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chats" />
-
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/shipping_cart_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cart" />
-
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/mange_account_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile" />
-        </com.google.android.material.tabs.TabLayout>
-
-        <!--
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/bottomNavigationBar"
-                app:menu="@menu/dashbroad_bottom_navigation_menu"
-                app:layout_constraintBottom_toBottomOf="parent" />
-                -->
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/activity_main_drawer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    -->
 </layout>

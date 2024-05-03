@@ -1,14 +1,19 @@
 package com.example.agrilinkup.View.Fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.HomeFragment
 import com.example.agrilinkup.R
 import com.example.agrilinkup.databinding.FragmentAddProductListingBinding
+import java.util.Calendar
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,6 +54,46 @@ class AddProductListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
+        var Seasons= arrayOf("Season","Spring","Summer","Fall(Autumn)","Winter")
+        if (binding.SeasonSpinner!=null) {
+            var adapter1= ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,Seasons)
+            binding.SeasonSpinner.adapter = adapter1
+            1.also { binding.SeasonSpinner.id = it }
+            binding.SeasonSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
+                    //Toast.makeText(requireContext(),"Spinner Position: ${position} and Season :${Seasons[position]}",Toast.LENGTH_LONG).show()
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+            }
+        }
+
+        binding.seasonStart.setOnClickListener(View.OnClickListener {
+            var cal = Calendar.getInstance()
+            var dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                var month1 = month + 1
+                var msg = "$dayOfMonth/$month1/$year"
+                binding.seasonStart.text=msg
+            }
+            DatePickerDialog(requireContext(),dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
+        })
+        binding.seasonEnd.setOnClickListener(View.OnClickListener {
+            var cal = Calendar.getInstance()
+            var dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                var month1 = month + 1
+                var msg = "$dayOfMonth/$month1/$year"
+                binding.seasonEnd.text=msg
+            }
+            DatePickerDialog(requireContext(),dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
+        })
+
+
 
         binding.cancel.setOnClickListener {
             bactToHomeFragment()

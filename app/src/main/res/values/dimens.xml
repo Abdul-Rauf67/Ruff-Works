@@ -11,7 +11,7 @@
     <!-- Fragments -->
     <dimen name="fragment_horizontal_margin">15dp</dimen>
     <dimen name="fragment_vertical_margin">15dp</dimen>
-    <dimen name="frag_title_size">38sp</dimen>
+    <dimen name="frag_title_size">28sp</dimen>
     <dimen name="frag_title_horizontal_margin">10dp</dimen>
     <dimen name="frag_title_vertical_margin">20dp</dimen>
 
@@ -38,5 +38,7 @@
     <!-- Height -->
     <dimen name="image_height">240dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 
 </resources>

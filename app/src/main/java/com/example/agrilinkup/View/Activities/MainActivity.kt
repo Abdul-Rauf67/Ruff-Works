@@ -1,21 +1,47 @@
 package com.example.agrilinkup
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
 
         val TabTitles= arrayOf("Home","Chats","Cart","Profile")
         val TabIcons=arrayOf(R.drawable.home_icon,R.drawable.chats_icon,R.drawable.shipping_cart_icon,R.drawable.mange_account_icon)
@@ -36,117 +62,28 @@ class MainActivity : AppCompatActivity() {
                 */
         }.attach()
 
-/*
-        var bottomNavigationBar=findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
-
-        bottomNavigationBar.setOnItemReselectedListener {
-            when(it.itemId){
-                R.id.HomeFragment -> homeFragment()
-                R.id.chatsFragment -> chatsFragment()
-                R.id.CartFragment -> cartFragment()
-                R.id.profileFragment -> profileFragment()
+    }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_profile -> {
+                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_messages -> {
+                Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_friends -> {
+                Toast.makeText(this, "Friends clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_update -> {
+                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_logout -> {
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
             }
         }
-
-*/
-    }
-
-    /*
-    fun homeFragment(){
-            val fragmentManager: FragmentManager = supportFragmentManager
-
-            val fragments = fragmentManager?.fragments
-            if (fragments != null) {
-                for (fragment in fragments) {
-                    if (fragment.tag == "HomeFragment"){
-
-                        //we don't want to create a new Fragment each time the user presses the button
-                        // return
-                    }
-                }
-            }
-
-            val fragment: Fragment = HomeFragment()
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-            fragmentTransaction.add(R.id.host, fragment, "HomeFragment")
-
-            fragmentTransaction.addToBackStack("HomeFragment")
-
-            fragmentTransaction.commit()
-    }
-    fun chatsFragment(){
-        val fragmentManager: FragmentManager = supportFragmentManager
-
-        val fragments = fragmentManager?.fragments
-        if (fragments != null) {
-            for (fragment in fragments) {
-                if (fragment.tag == "ChatFragment"){
-
-                    //we don't want to create a new Fragment each time the user presses the button
-                    // return
-                }
-            }
-        }
-
-        val fragment: Fragment = ChatFragment()
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-        fragmentTransaction.add(R.id.host, fragment, "ChatFragment")
-
-        fragmentTransaction.addToBackStack("ChatFragment")
-
-        fragmentTransaction.commit()
-    }
-    fun cartFragment(){
-        val fragmentManager: FragmentManager = supportFragmentManager
-
-        val fragments = fragmentManager?.fragments
-        if (fragments != null) {
-            for (fragment in fragments) {
-                if (fragment.tag == "CartFragment"){
-
-                    //we don't want to create a new Fragment each time the user presses the button
-                    // return
-                }
-            }
-        }
-
-        val fragment: Fragment = CartFragment()
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-        fragmentTransaction.add(R.id.host, fragment, "CartFragment")
-
-        fragmentTransaction.addToBackStack("CartFragment")
-
-        fragmentTransaction.commit()
-
-    }
-    fun profileFragment(){
-        val fragmentManager: FragmentManager = supportFragmentManager
-
-        val fragments = fragmentManager?.fragments
-        if (fragments != null) {
-            for (fragment in fragments) {
-                if (fragment.tag == "ProfileFragment"){
-
-                    //we don't want to create a new Fragment each time the user presses the button
-                    // return
-                }
-            }
-        }
-
-        val fragment: Fragment = ProfileFragment()
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-        fragmentTransaction.add(R.id.host, fragment, "ProfileFragment")
-
-        fragmentTransaction.addToBackStack("ProfileFragment")
-
-        fragmentTransaction.commit()
-
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
 
-     */
 }

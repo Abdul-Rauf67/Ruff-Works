@@ -72,6 +72,32 @@
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/txtProductSubType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Product Sub Type"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/productQuality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Product Quality"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -169,28 +195,15 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
-                        <EditText
-                            android:id="@+id/Session"
+
+                        <Spinner
+                            android:layout_marginTop="6dp"
+                            android:text="Season"
+                            android:id="@+id/SeasonSpinner"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Session"
-                            android:inputType="numberDecimal"
-                            android:imeActionId="6" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2">
-
-                        <EditText
-                            android:id="@+id/sessionStart"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="sessionStart"
+                            android:layout_height="55dp"
                             android:imeActionId="6"
-                            android:inputType="number" />
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -199,12 +212,31 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
-                        <EditText
-                            android:id="@+id/sessionEnd"
+                        <TextView
+                            android:gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:id="@+id/seasonStart"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="sessionEnd"
-                            android:inputType="text" />
+                            android:layout_height="55dp"
+                            android:hint="Start Date"
+                            android:imeActionId="6"
+                            android:inputType="date" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2">
+
+                        <TextView
+                            android:gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:id="@+id/seasonEnd"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:hint="End Date"
+                            android:inputType="date" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
