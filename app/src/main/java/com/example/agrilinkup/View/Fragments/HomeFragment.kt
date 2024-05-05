@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.databinding.FragmentHomeBinding
@@ -37,7 +41,23 @@ class HomeFragment : Fragment() {
         //val view=inflater.inflate(R.layout.fragment_home, container, false)
 
         binding= FragmentHomeBinding.inflate(inflater,container,false)
-        return binding.root
+         val view= binding.root
+
+        val toolbar=view.findViewById<Toolbar>(R.id.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+
+        val toggleButton=ActionBarDrawerToggle(
+            requireActivity(),
+            binding.drawerlsyout,
+            toolbar,
+            R.string.nav_open,
+            R.string.nav_close
+        )
+        binding.drawerlsyout.addDrawerListener(toggleButton)
+        toggleButton.syncState()
+
+        return view
 
     }
 
@@ -47,7 +67,7 @@ class HomeFragment : Fragment() {
 
         binding.addProductsListings.setOnClickListener {
 
-            binding.viewlayout.visibility=View.INVISIBLE
+            binding.drawerlsyout.visibility=View.INVISIBLE
             val fragmentTansaction=childFragmentManager.beginTransaction()
             val addProductListingFragment=AddProductListingFragment()
             fragmentTansaction.replace(R.id.fragment_container,addProductListingFragment)

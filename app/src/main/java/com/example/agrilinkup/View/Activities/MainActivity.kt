@@ -31,17 +31,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navView = findViewById(R.id.nav_view)
-
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        navView.setNavigationItemSelectedListener(this)
+//        toolbar = findViewById(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//
+//        drawerLayout = findViewById(R.id.drawer_layout)
+//        navView = findViewById(R.id.nav_view)
+//
+//        val toggle = ActionBarDrawerToggle(
+//            this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close)
+//        drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+//        navView.setNavigationItemSelectedListener(this)
 
         val TabTitles= arrayOf("Home","Chats","Cart","Profile")
         val TabIcons=arrayOf(R.drawable.home_icon,R.drawable.chats_icon,R.drawable.shipping_cart_icon,R.drawable.mange_account_icon)
