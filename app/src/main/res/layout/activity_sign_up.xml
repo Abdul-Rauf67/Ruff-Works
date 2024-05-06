@@ -63,6 +63,51 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent">
 
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayoutimage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:src="@drawable/ic_baseline_person_24"
+                        android:id="@+id/ProfilePhoto"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_marginStart="15dp"
+                        android:id="@+id/addImageTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Profile Photo"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_marginStart="15dp"
+                        android:id="@+id/image_reg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ems="10"
+                        android:hint="imageName"
+                        android:inputType="textPersonName"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
+                        app:layout_constraintTop_toBottomOf="@+id/addImageTxt" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
                     android:layout_width="0dp"
@@ -72,7 +117,7 @@
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayoutimage">
 
                     <TextView
                         android:id="@+id/nam"
@@ -163,6 +208,47 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/accountTypeConst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+
+                    <Spinner
+                        android:id="@+id/accountType"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:imeActionId="6"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/account"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/account"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select your Account type"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout5"
                     android:layout_width="0dp"
@@ -173,7 +259,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+                    app:layout_constraintTop_toBottomOf="@+id/accountTypeConst">
 
                     <TextView
                         android:id="@+id/txt3"
