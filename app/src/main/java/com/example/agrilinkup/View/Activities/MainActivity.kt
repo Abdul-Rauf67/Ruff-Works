@@ -20,12 +20,13 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(){
 
 
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    lateinit var viewPager2: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val TabTitles= arrayOf("Home","Chats","Cart","Profile")
         val TabIcons=arrayOf(R.drawable.home_icon,R.drawable.chats_icon,R.drawable.shipping_cart_icon,R.drawable.mange_account_icon)
 
-        val viewPager2=findViewById<ViewPager2>(R.id.ViewpagerTwo)
+        viewPager2=findViewById<ViewPager2>(R.id.ViewpagerTwo)
         val layoutTab=findViewById<TabLayout>(R.id.tabLayout)
 
         val adapter=ViewPagerAdapter(supportFragmentManager,lifecycle)
@@ -63,27 +64,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }.attach()
 
     }
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_profile -> {
-                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_messages -> {
-                Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Friends clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_logout -> {
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
-            }
-        }
-        drawerLayout.closeDrawer(GravityCompat.START)
+
+
+    fun switchToFragment(fragmentIndex:Int) : Boolean {
+        viewPager2.currentItem=fragmentIndex
         return true
     }
+
+
+
+
+//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//
+//            R.id.nav_update -> {
+//                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
+//            }
+//            R.id.nav_logout -> {
+//                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        drawerLayout.closeDrawer(GravityCompat.START)
+//        return true
+//    }
 
 
 }

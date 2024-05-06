@@ -5,12 +5,6 @@
         <item
             android:id="@+id/nav_profile"
             android:title="Profile"/>
-        <item
-            android:id="@+id/nav_messages"
-            android:title="Messages"/>
-        <item
-            android:id="@+id/nav_friends"
-            android:title="Friends"/>
     </group>
 <group >
 
@@ -22,10 +16,6 @@
             <item
                 android:id="@+id/nav_logout"
                 android:title="Sign Out"/>
-            <item
-                android:id="@+id/newItem"
-                android:title="New Item"
-                />
         </menu>
     </item>
 </group>

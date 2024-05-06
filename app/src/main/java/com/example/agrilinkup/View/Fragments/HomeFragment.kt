@@ -57,6 +57,7 @@ class HomeFragment : Fragment() {
         binding.drawerlsyout.addDrawerListener(toggleButton)
         toggleButton.syncState()
 
+
         return view
 
     }
@@ -64,6 +65,18 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
+        binding.navView.setNavigationItemSelectedListener { menuItem->
+            when(menuItem.itemId){
+                R.id.nav_profile->(activity as MainActivity).switchToFragment(3)
+                else -> {
+                    (activity as MainActivity).switchToFragment(0)
+
+                }
+            }
+        }
 
         binding.addProductsListings.setOnClickListener {
 
