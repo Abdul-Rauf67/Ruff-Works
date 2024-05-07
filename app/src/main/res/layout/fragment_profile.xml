@@ -39,37 +39,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
                 tools:layout_editor_absoluteX="0dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
+
+                <com.example.agrilinkup.CircularImageView
+                    android:id="@+id/image_circular"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:layout_margin="15dp"
-                    app:cardBackgroundColor="#4DAC9D"
-                    app:cardCornerRadius="100dp"
-                    app:cardPreventCornerOverlap="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/image_one"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="MissingConstraints">
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image_one" />
-
-                    <ImageButton
-                        android:src="@drawable/ic_menu_camera"
-                        android:background="@color/green"
-                        android:layout_gravity="bottom|center"
-                        android:id="@+id/changeProfilePhoto"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:backgroundTint="@color/main_color"
-                        android:text="Update"
-
-                        app:rippleColor="#870D0D" />
-
-
-                </androidx.cardview.widget.CardView>
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="112dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/circular_background_drawable"
+                    android:padding="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_menu_camera"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

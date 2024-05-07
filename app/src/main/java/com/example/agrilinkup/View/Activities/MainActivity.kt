@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity(){
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
     lateinit var viewPager2: ViewPager2
+    lateinit var adapter:ViewPagerAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity(){
         viewPager2=findViewById<ViewPager2>(R.id.ViewpagerTwo)
         val layoutTab=findViewById<TabLayout>(R.id.tabLayout)
 
-        val adapter=ViewPagerAdapter(supportFragmentManager,lifecycle)
+        adapter=ViewPagerAdapter(supportFragmentManager,lifecycle)
         viewPager2.adapter=adapter
 
         TabLayoutMediator(layoutTab,viewPager2){tab,position ->
@@ -68,6 +70,13 @@ class MainActivity : AppCompatActivity(){
 
     fun switchToFragment(fragmentIndex:Int) : Boolean {
         viewPager2.currentItem=fragmentIndex
+        return true
+    }
+
+    fun replaceFragmentsInViewpager(fragment: Fragment,index:Int):Boolean{
+        adapter.replaceFragment(index,fragment)
+        viewPager2.adapter=adapter
+        switchToFragment(index)
         return true
     }
 

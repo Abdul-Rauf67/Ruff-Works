@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
+import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
 import com.example.agrilinkup.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,11 +70,21 @@ class HomeFragment : Fragment() {
 
 
         binding.navView.setNavigationItemSelectedListener { menuItem->
-            when(menuItem.itemId){
-                R.id.nav_profile->(activity as MainActivity).switchToFragment(3)
+            when(menuItem.itemId) {
+                R.id.nav_profile ->
+                    (activity as MainActivity)
+                        .replaceFragmentsInViewpager(ProfileFragment(),3)
+
+                R.id.chat_messages ->
+                    (activity as MainActivity)
+                        .replaceFragmentsInViewpager(Chat_Messages_Fragment(),1)
+
+                R.id.chatsfragment123 ->
+                    (activity as MainActivity)
+                        .replaceFragmentsInViewpager(ChatFragment(),1)
+
                 else -> {
                     (activity as MainActivity).switchToFragment(0)
-
                 }
             }
         }

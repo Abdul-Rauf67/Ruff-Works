@@ -9,16 +9,23 @@ import com.example.agrilinkup.ChatFragment
 class ViewPagerAdapter(fragmentManager:FragmentManager,lifeCycle:Lifecycle):
     FragmentStateAdapter(fragmentManager,lifeCycle) {
 
+        private var fragments = arrayListOf(
+            HomeFragment(),
+            ChatFragment(),
+            CartFragment(),
+            ProfileFragment()
+        )
+
     override fun getItemCount(): Int {
-        return 4
+        return fragments.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when(position){
-            1 -> ChatFragment()
-            2 ->  CartFragment()
-            3 -> ProfileFragment()
-            else -> HomeFragment()
-        }
+        return fragments[position]
+    }
+
+    fun replaceFragment(position: Int,newFragment: Fragment){
+        fragments[position]=newFragment
+        notifyDataSetChanged()
     }
 }
