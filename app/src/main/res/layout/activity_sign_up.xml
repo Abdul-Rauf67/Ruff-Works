@@ -174,27 +174,49 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
-                    <EditText
-                        android:id="@+id/mobile_reg"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:ems="10"
-                        android:hint="Enter Your Phone"
-                        android:inputType="phone"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/countryCodePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:ccpDialog_fastScroller_bubbleColor="@color/color_edittext_background"
+                        app:ccpDialog_textColor="@color/color_textview"
+                        app:ccp_arrowColor="@color/color_textview"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_autoDetectLanguage="true"
+                        app:ccp_contentColor="@color/color_textview"
+                        app:ccp_hintExampleNumber="true"
+                        app:ccp_showNameCode="false"
+                        app:ccp_showPhoneCode="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txt2" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/phoneNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:hint="Phone Number"
+                        android:inputType="phone"
+                        android:paddingHorizontal="15dp"
+                        android:singleLine="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/countryCodePicker"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/countryCodePicker"
+                        app:layout_constraintTop_toTopOf="@+id/countryCodePicker"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
 
                     <TextView
                         android:id="@+id/txt2"
@@ -207,8 +229,6 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/accountTypeConst"
@@ -458,7 +478,7 @@
                     android:id="@+id/register_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="53dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="84dp"
                     android:backgroundTint="@color/main_color"
                     android:onClick="onClick_register"
                     android:text="@string/register"
@@ -469,18 +489,20 @@
                     app:rippleColor="#870D0D" />
 
                 <TextView
-                    android:layout_marginTop="15dp"
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="62dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="112dp"
                     android:minHeight="48dp"
                     android:text="Already have an account? Login"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.496"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/register_btn" />
+                    app:layout_constraintTop_toBottomOf="@+id/register_btn"
+                    app:layout_constraintVertical_bias="0.0" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
