@@ -1,6 +1,7 @@
 package com.example.agrilinkup.utils
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 object ProgressDialogUtil {
 
@@ -14,5 +15,15 @@ object ProgressDialogUtil {
     fun Fragment.dismissProgressDialog() {
         progressDialog?.dismiss()
         progressDialog = null
+    }
+
+    fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
+
+    fun showProgressDialog(fragmentManager: FragmentManager) {
+        progressDialog = ProgressDialogFragment()
+        progressDialog?.show(fragmentManager, "progressDialog")
     }
 }

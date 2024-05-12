@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import com.example.agrilinkup.MainActivity
 import com.example.agrilinkup.R
+import com.example.agrilinkup.SignUpActivity
 import com.example.agrilinkup.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.register.setOnClickListener {
-            startActivity(Intent(this,SignUpActivity::class.java))
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
     }
 }

@@ -29,13 +29,12 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="4dp"
             android:text="Registration"
             android:textColor="#000000"
             android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -44,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="16dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -75,36 +74,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:src="@drawable/ic_baseline_person_24"
-                        android:id="@+id/ProfilePhoto"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ProfilePhoto2"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/logo_profile_pic_placeholder"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:layout_marginStart="15dp"
-                        android:id="@+id/addImageTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add Profile Photo"
-                        android:textSize="24sp"
-                        app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <ImageButton
+                        android:id="@+id/ProfilePhoto"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/circular_background_drawable"
+                        android:padding="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_menu_camera"
+                        app:layout_constraintBottom_toBottomOf="@+id/ProfilePhoto2"
+                        app:layout_constraintEnd_toEndOf="@+id/ProfilePhoto2" />
 
-                    <TextView
-                        android:layout_marginStart="15dp"
-                        android:id="@+id/image_reg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:ems="10"
-                        android:hint="imageName"
-                        android:inputType="textPersonName"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
-                        app:layout_constraintTop_toBottomOf="@+id/addImageTxt" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -188,7 +180,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
                     <com.hbb20.CountryCodePicker
-                        android:id="@+id/countryCodePicker"
+                        android:id="@+id/countryCodePicker1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:ccpDialog_fastScroller_bubbleColor="@color/color_edittext_background"
@@ -211,10 +203,10 @@
                         android:inputType="phone"
                         android:paddingHorizontal="15dp"
                         android:singleLine="true"
-                        app:layout_constraintBottom_toBottomOf="@+id/countryCodePicker"
+                        app:layout_constraintBottom_toBottomOf="@+id/countryCodePicker1"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/countryCodePicker"
-                        app:layout_constraintTop_toTopOf="@+id/countryCodePicker"
+                        app:layout_constraintStart_toEndOf="@+id/countryCodePicker1"
+                        app:layout_constraintTop_toTopOf="@+id/countryCodePicker1"
                         tools:ignore="SpeakableTextPresentCheck" />
 
 
@@ -398,7 +390,7 @@
                         android:layout_height="48dp"
                         android:ems="10"
                         android:hint="Address"
-                        android:inputType="textPersonName"
+                        android:inputType="text"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -427,7 +419,7 @@
                         tools:text="Password" />
 
                     <EditText
-                        android:id="@+id/password_reg"
+                        android:id="@+id/password_reg1"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:ems="10"
@@ -461,7 +453,7 @@
                         tools:text="Confirm Password" />
 
                     <EditText
-                        android:id="@+id/confirm_pass_reg"
+                        android:id="@+id/confirm_pass_reg2"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:ems="10"
@@ -489,7 +481,7 @@
                     app:rippleColor="#870D0D" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/loginActivityTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

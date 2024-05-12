@@ -27,6 +27,13 @@ android {
         viewBinding = true
     }
 
+        // Configure Dagger Hilt options for annotation processing
+//        kapt {
+//            useBuildCache = true
+//            correctErrorTypes = true
+//        }
+
+
 
     buildTypes {
         release {
@@ -43,6 +50,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
+//        freeCompilerArgs += "-P"
+//        freeCompilerArgs += "disableIncProcessor=true"
+
+//        freeCompilerArgs += [
+//            "-Xopt-in=kotlin.RequiresOptIn",
+//            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+//            "-Xopt-in=kotlinx.coroutines.FlowPreview"
+//        ]
     }
 }
 
@@ -78,6 +94,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
 
     //hilt
+   // implementation("dagger.hilt:hilt-lifecycle-viewmodel")
     implementation ("com.google.dagger:hilt-android:2.50")
     ksp ("com.google.dagger:hilt-compiler:2.50")
 
