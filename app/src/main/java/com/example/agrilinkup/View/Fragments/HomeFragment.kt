@@ -1,5 +1,6 @@
 package com.example.agrilinkup
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +11,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.View.Activities.LoginActivity
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
 import com.example.agrilinkup.databinding.FragmentHomeBinding
+import com.example.agrilinkup.utils.Dialogs
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +29,7 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentHomeBinding
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,7 @@ class HomeFragment : Fragment() {
         //val view=inflater.inflate(R.layout.fragment_home, container, false)
 
         binding= FragmentHomeBinding.inflate(inflater,container,false)
+        auth= FirebaseModule_ProvideFirebaseAuthFactory.provideFirebaseAuth()
          val view= binding.root
 
         val toolbar=view.findViewById<Toolbar>(R.id.toolbar)
@@ -83,6 +89,8 @@ class HomeFragment : Fragment() {
                     (activity as MainActivity)
                         .replaceFragmentsInViewpager(ChatFragment(),1)
 
+                R.id.nav_logout ->
+                    logout()
                 else -> {
                     (activity as MainActivity).switchToFragment(0)
                 }
@@ -102,6 +110,14 @@ class HomeFragment : Fragment() {
             //findNavController().navigate(R.id.action_homeFragment_to_addProductListingFragment)
 
         }
+    }
+    private fun logout(): Boolean {
+        Dialogs.logoutDialog(requireContext(), layoutInflater) {
+            auth.signOut()
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            requireActivity().finish()
+        }
+        return true
     }
 
     companion object {

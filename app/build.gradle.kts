@@ -80,6 +80,7 @@ dependencies {
     // image picker
     //implementation ("com.github.Dhaval2404:ImagePicker:v2.1")
     implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation("androidx.activity:activity:1.8.0")
 
     //navigation components
     val nav_version = "2.7.7"
