@@ -6,22 +6,31 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.utils.Glide
+import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.Activities.LoginActivity
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
 import com.example.agrilinkup.databinding.FragmentHomeBinding
 import com.example.agrilinkup.utils.Dialogs
+import com.example.agrilinkup.utils.gone
+import com.example.agrilinkup.utils.invisible
+import com.example.agrilinkup.utils.visible
 import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
 
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -30,6 +39,10 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     lateinit var auth: FirebaseAuth
+    @Inject
+    lateinit var preferenceManager: PreferenceManager
+    lateinit var  imageview1:ImageView
+    lateinit var progressofImage:ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +63,18 @@ class HomeFragment : Fragment() {
         auth= FirebaseModule_ProvideFirebaseAuthFactory.provideFirebaseAuth()
          val view= binding.root
 
+        preferenceManager= PreferenceManager(requireContext())
+
+
+        var navigation=binding.navView
+        var header=navigation.getHeaderView(0)
+        imageview1=header.findViewById<ImageView>(R.id.navHeaderImageView)
+        progressofImage=header.findViewById<ProgressBar>(R.id.pgProfileImage)
+        //navImage=view.findViewById(R.id.navHeaderImageView)
+
+
         val toolbar=view.findViewById<Toolbar>(R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-
 
         val toggleButton=ActionBarDrawerToggle(
             requireActivity(),
@@ -64,19 +86,20 @@ class HomeFragment : Fragment() {
         binding.drawerlsyout.addDrawerListener(toggleButton)
         toggleButton.syncState()
 
+        //navImage=view.findViewById(R.id.navHeaderImageView)
+
 
         return view
-
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         binding.navView.setNavigationItemSelectedListener { menuItem->
+
             when(menuItem.itemId) {
+
                 R.id.nav_profile ->
                     (activity as MainActivity)
                         .replaceFragmentsInViewpager(ProfileFragment(),3)
@@ -96,6 +119,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        setUpProfileImage()
 
         binding.addProductsListings.setOnClickListener {
 
@@ -139,4 +163,17 @@ class HomeFragment : Fragment() {
                 }
             }
     }
+
+
+
+    private fun setUpProfileImage() {
+        val user = preferenceManager.getUserData()
+        user?.let {
+            binding.toolbar.subtitle = it.fullName
+            Glide.loadImageWithListener(requireContext(), user.profileImageUri, imageview1) {
+                progressofImage.gone()
+            }
+        }
+    }
+
 }
