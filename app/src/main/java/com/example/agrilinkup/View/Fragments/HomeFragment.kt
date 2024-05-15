@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -41,8 +42,12 @@ class HomeFragment : Fragment() {
     lateinit var auth: FirebaseAuth
     @Inject
     lateinit var preferenceManager: PreferenceManager
+
+    //Navigation Header Views
     lateinit var  imageview1:ImageView
     lateinit var progressofImage:ProgressBar
+    lateinit var nameHeader:TextView
+    lateinit var emailHeader:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +75,8 @@ class HomeFragment : Fragment() {
         var header=navigation.getHeaderView(0)
         imageview1=header.findViewById<ImageView>(R.id.navHeaderImageView)
         progressofImage=header.findViewById<ProgressBar>(R.id.pgProfileImage)
+        nameHeader=header.findViewById(R.id.UserName)
+        emailHeader=header.findViewById(R.id.UserEmail)
         //navImage=view.findViewById(R.id.navHeaderImageView)
 
 
@@ -170,6 +177,8 @@ class HomeFragment : Fragment() {
         val user = preferenceManager.getUserData()
         user?.let {
             binding.toolbar.subtitle = it.fullName
+            nameHeader.text=user.fullName
+            emailHeader.text=user.email
             Glide.loadImageWithListener(requireContext(), user.profileImageUri, imageview1) {
                 progressofImage.gone()
             }
