@@ -1,19 +1,17 @@
-package com.example.agrilinkup
+package com.example.agrilinkup.View.Fragments.UserAccount
 
-import com.example.agrilinkup.ui.ProfileRepository
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentProfileBinding
+import com.example.agrilinkup.ui.ProfileRepository
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.Glide
 import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
@@ -25,16 +23,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
 class ProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -51,8 +48,8 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param1 = it.getString(com.example.agrilinkup.View.Fragments.UserAccount.ARG_PARAM1)
+            param2 = it.getString(com.example.agrilinkup.View.Fragments.UserAccount.ARG_PARAM2)
         }
     }
 
@@ -63,14 +60,14 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        val prefs=PreferenceManager(requireContext())
-        val auth=FirebaseAuth.getInstance()
-        val db=FirebaseFirestore.getInstance()
-        val storage=FirebaseStorage.getInstance().getReference()
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
         val context=requireContext()
         preferenceManager=prefs
 
-        val profileRepo=ProfileRepository(db,auth,prefs,storage,context)
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
         vmProfile = VmProfile(profileRepo)
         inIt()
         return binding.root
@@ -90,7 +87,7 @@ class ProfileFragment : Fragment() {
             binding.nameReg.text = user.fullName
             binding.emailReg.text = user.email
             binding.mobileReg.text=user.phoneNumber
-            var completeAddress:String=user.address+",  " +user.district+",  " +user.state
+            val completeAddress:String=user.address+",  " +user.district+",  " +user.state
             binding.addressReg.text=completeAddress
             binding.accountType.text=user.accountType
 
@@ -148,8 +145,8 @@ class ProfileFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(com.example.agrilinkup.View.Fragments.UserAccount.ARG_PARAM1, param1)
+                    putString(com.example.agrilinkup.View.Fragments.UserAccount.ARG_PARAM2, param2)
                 }
             }
     }

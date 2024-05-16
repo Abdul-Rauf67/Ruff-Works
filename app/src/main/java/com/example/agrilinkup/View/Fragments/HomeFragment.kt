@@ -9,21 +9,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.utils.Glide
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.Activities.LoginActivity
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
+import com.example.agrilinkup.View.Fragments.MainFragment
+import com.example.agrilinkup.View.Fragments.UserAccount.ProfileFragment
 import com.example.agrilinkup.databinding.FragmentHomeBinding
 import com.example.agrilinkup.utils.Dialogs
 import com.example.agrilinkup.utils.gone
-import com.example.agrilinkup.utils.invisible
-import com.example.agrilinkup.utils.visible
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -105,24 +103,26 @@ class HomeFragment : Fragment() {
 
         binding.navView.setNavigationItemSelectedListener { menuItem->
 
+
+
             when(menuItem.itemId) {
 
                 R.id.nav_profile ->
-                    (activity as MainActivity)
-                        .replaceFragmentsInViewpager(ProfileFragment(),3)
+                    (parentFragment as MainFragment)
+                        .replaceFragmentsInViewpager(ProfileFragment(), 3)
 
                 R.id.chat_messages ->
-                    (activity as MainActivity)
+                    (parentFragment as MainFragment)
                         .replaceFragmentsInViewpager(Chat_Messages_Fragment(),1)
 
                 R.id.chatsfragment123 ->
-                    (activity as MainActivity)
+                    (parentFragment as MainFragment)
                         .replaceFragmentsInViewpager(ChatFragment(),1)
 
                 R.id.nav_logout ->
                     logout()
                 else -> {
-                    (activity as MainActivity).switchToFragment(0)
+                    (parentFragment as MainFragment).switchToFragment(0)
                 }
             }
         }

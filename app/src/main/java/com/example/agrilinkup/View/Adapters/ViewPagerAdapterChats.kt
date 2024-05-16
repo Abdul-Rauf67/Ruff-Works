@@ -3,12 +3,6 @@ package com.example.agrilinkup.View.Adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.Lifecycle
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.agrilinkup.CartFragment
-import com.example.agrilinkup.ChatFragment
-import com.example.agrilinkup.HomeFragment
-import com.example.agrilinkup.ProfileFragment
 import com.example.agrilinkup.View.Fragments.CommunityFragment
 import com.example.agrilinkup.View.Fragments.GroupsFragment
 import com.example.agrilinkup.View.Fragments.InboxFragment

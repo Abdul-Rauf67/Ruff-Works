@@ -1,12 +1,15 @@
-package com.example.agrilinkup
+package com.example.agrilinkup.View.Fragments.UserAccount
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.agrilinkup.View.Fragments.MainFragment
-import com.example.agrilinkup.databinding.FragmentCartBinding
+import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.R
+import com.example.agrilinkup.View.Fragments.AddProductListingFragment
+import com.example.agrilinkup.databinding.FragmentUserProductsBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -15,15 +18,17 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CartFragment.newInstance] factory method to
+ * Use the [UserProductsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CartFragment : Fragment() {
+class UserProductsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding: FragmentCartBinding
+    private lateinit var binding:FragmentUserProductsBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +42,30 @@ class CartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentCartBinding.inflate(inflater, container, false)
+        // Inflate the layout for this fragment
+        binding = FragmentUserProductsBinding.inflate(inflater, container, false)
         return binding.root
-    }
+
+          }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.addProductsToCart.setOnClickListener{
-            (parentFragment as MainFragment)
-                .switchToFragment(0)
+        binding.addProductsListings.setOnClickListener {
+
+//            val fragmentTansaction=childFragmentManager.beginTransaction()
+//            val addProductListingFragment= AddProductListingFragment()
+//            fragmentTansaction.replace(R.id.fragment_container,addProductListingFragment)
+//            fragmentTansaction.addToBackStack(null)
+//            fragmentTansaction.commit()
+
+
+            findNavController().navigate(R.id.action_userProductsFragment2_to_addProductListingFragment3)
+
         }
     }
+
 
     companion object {
         /**
@@ -58,12 +74,12 @@ class CartFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment CartFragment.
+         * @return A new instance of fragment UserProductsG.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            CartFragment().apply {
+            UserProductsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

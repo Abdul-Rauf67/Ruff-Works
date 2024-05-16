@@ -3,8 +3,11 @@ package com.example.agrilinkup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.agrilinkup.ChatFragment
+import com.example.agrilinkup.View.Fragments.UserAccount.UserAccountFragment
 
 class ViewPagerAdapter(fragmentManager:FragmentManager,lifeCycle:Lifecycle):
     FragmentStateAdapter(fragmentManager,lifeCycle) {
@@ -13,7 +16,7 @@ class ViewPagerAdapter(fragmentManager:FragmentManager,lifeCycle:Lifecycle):
             HomeFragment(),
             ChatFragment(),
             CartFragment(),
-            ProfileFragment()
+            UserAccountFragment()
         )
 
     override fun getItemCount(): Int {
