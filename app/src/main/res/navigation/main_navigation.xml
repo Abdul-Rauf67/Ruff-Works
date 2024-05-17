@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@id/mainFragment2">
 
@@ -47,5 +48,13 @@
         <action
             android:id="@+id/action_mainFragment2_to_addProductListingFragment3"
             app:destination="@id/addProductListingFragment3" />
+        <action
+            android:id="@+id/action_mainFragment2_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.updateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" />
 </navigation>

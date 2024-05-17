@@ -14,5 +14,5 @@ data class ModelUser(
     var profileImageUri: String,
     var docId: String = ""
 ) {
-    constructor() : this("", "", "", "", "", "", "","","")
+    constructor() : this(email="", "", "", "", "", "", "","","")
 }

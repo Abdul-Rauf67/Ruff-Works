@@ -70,6 +70,9 @@ class UserAccountFragment : Fragment() {
         binding.myOrders.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment2_to_userOrdersFragment2)
         }
+        binding.updateProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment2_to_updateProfileFragment)
+        }
 
 
 
