@@ -117,27 +117,33 @@
 
                             <include
                                 android:id="@+id/item1"
+                                android:visibility="gone"
                                 layout="@layout/product_listing_items"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintTop_toBottomOf="@+id/txtFilter"
                                 tools:layout_editor_absoluteX="15dp" />
 
-                            <include
-                                android:id="@+id/item2"
-                                layout="@layout/product_listing_items"
+                            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintTop_toBottomOf="@+id/item1"
-                                tools:layout_editor_absoluteX="15dp" />
+                                android:layout_height="0dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtFilter"
+                                tools:layout_editor_absoluteX="15dp">
 
-                            <include
-                                android:id="@+id/item3"
-                                layout="@layout/product_listing_items"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintTop_toBottomOf="@+id/item2"
-                                tools:layout_editor_absoluteX="15dp" />
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/recyclerView_product_items"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    tools:listitem="@layout/product_listing_items"
+                                    >
+
+                                </androidx.recyclerview.widget.RecyclerView>
+
+
+                            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
                             <com.google.android.material.floatingactionbutton.FloatingActionButton

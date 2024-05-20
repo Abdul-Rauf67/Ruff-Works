@@ -163,7 +163,7 @@ class updateProfileFragment : Fragment() {
             etPhoneNum.setText(it.phoneNumber)
             etAddress.setText(it.address)
             etState.setText(it.state)
-            etAddress.setText(it.address)
+            etDistract.setText(it.district)
             val eetAccountType=it.accountType
             this.profileImgUri = it.profileImageUri
             this.userEmail = it.email

@@ -66,17 +66,17 @@ class SignUpActivity : AppCompatActivity() {
 
         inIt1()
 
-        var Seasons= arrayOf("Farmer","Consumer","Trader")
+        var AccountType= arrayOf("Farmer","Consumer","Trader")
         if (binding.accountType!=null) {
-            var adapter1= ArrayAdapter(this,android.R.layout.simple_spinner_item,Seasons)
+            var adapter1= ArrayAdapter(this,android.R.layout.simple_spinner_item,AccountType)
             binding.accountType.adapter = adapter1
             1.also { binding.accountType.id = it }
             binding.accountType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
-                    accountType=Seasons[position]
+                    accountType=AccountType[position]
                    }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    accountType=Seasons[0]
+                    accountType=AccountType[0]
                 }
             }
         }

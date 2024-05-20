@@ -5,10 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
+import com.example.agrilinkup.View.Adapters.AdapterMyProducts
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
+import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentUserProductsBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
+import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
+import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
+import com.example.agrilinkup.utils.toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +40,8 @@ class UserProductsFragment : Fragment() {
 
     private lateinit var binding:FragmentUserProductsBinding
 
+    private lateinit var vmProfile: VmProfile
+    private lateinit var preferenceManager:PreferenceManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +58,18 @@ class UserProductsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentUserProductsBinding.inflate(inflater, container, false)
+
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
+        val context=requireContext()
+        preferenceManager=prefs
+
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
+        vmProfile = VmProfile(profileRepo)
+        vmProfile.fetchProducts()
+        setUpObserver()
         return binding.root
 
           }
@@ -53,17 +79,9 @@ class UserProductsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addProductsListings.setOnClickListener {
-
-//            val fragmentTansaction=childFragmentManager.beginTransaction()
-//            val addProductListingFragment= AddProductListingFragment()
-//            fragmentTansaction.replace(R.id.fragment_container,addProductListingFragment)
-//            fragmentTansaction.addToBackStack(null)
-//            fragmentTansaction.commit()
-
-
             findNavController().navigate(R.id.action_userProductsFragment2_to_addProductListingFragment3)
-
         }
+
     }
 
 
@@ -85,5 +103,39 @@ class UserProductsFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+
+
+    private fun setUpObserver() {
+        vmProfile.fetchProduct.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    val productsList = it.data
+                    if (!productsList.isNullOrEmpty()) {
+                        binding.recyclerViewProductItems.adapter =AdapterMyProducts(productsList,requireContext())
+                      }
+//                    else {
+//                        binding.lyNoCars.visible()
+//                        binding.rvVehicles.gone()
+//                    }
+                    dismissProgressDialog()
+                }
+
+                is DataState.Error -> {
+                    toast(it.errorMessage)
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    showProgressDialog()
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
 }

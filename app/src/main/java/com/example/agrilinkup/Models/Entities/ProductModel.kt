@@ -13,11 +13,13 @@ data class ProductModel(
     var productTotalUnits:String,
     var productDiscription:String,
     var productStatus:String,
-    var productSeason:String,
     var productSeasonStartDate:String,
-    var productseasonEndDate:String
+    var productseasonEndDate:String,
+    var user_ID:String,
+    var productUploadDateTime:String="",
+    var docId: String = ""
 ){
     constructor() : this("","","","",
-        "","","","","",
+        "","","","","","",
         "","","","")
 }

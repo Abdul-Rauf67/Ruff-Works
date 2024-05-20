@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.agrilinkup.ModelUser
+import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.ui.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,8 +16,8 @@ class VmProfile @Inject constructor(
 ) : ViewModel() {
     val updateStatus = profileRepository.updateStatus
     val userPicUpdate = profileRepository.profilePicUpdate
-    val addVehicleStatus = profileRepository.addVehicleStatus
-   // val fetchVehicles = profileRepository.fetchVehicles
+    val addProductStatus = profileRepository.addProductStatus
+    val fetchProduct = profileRepository.fetchProducts
 
     fun updateUser(user: ModelUser) {
         viewModelScope.launch {
@@ -30,15 +31,15 @@ class VmProfile @Inject constructor(
         }
     }
 
-//    fun addVehicle(vehicle: ModelVehicle) {
-//        viewModelScope.launch {
-//            profileRepository.addVehicle(vehicle)
-//        }
-//    }
-//
-//    fun fetchVehicles() {
-//        viewModelScope.launch {
-//            profileRepository.fetchVehicles()
-//        }
-//    }
+    fun addProduct(product: ProductModel) {
+        viewModelScope.launch {
+            profileRepository.uploadProductImage(product)
+        }
+    }
+
+    fun fetchProducts() {
+        viewModelScope.launch {
+            profileRepository.fetchProducts()
+        }
+    }
 }

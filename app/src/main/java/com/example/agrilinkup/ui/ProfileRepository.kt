@@ -3,10 +3,12 @@ package com.example.agrilinkup.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.agrilinkup.ModelUser
+import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.ImageUtils
@@ -31,11 +33,11 @@ class ProfileRepository @Inject constructor(
     private val _profilePicUpdateStatus = MutableLiveData<DataState<Nothing>>()
     val profilePicUpdate: LiveData<DataState<Nothing>> = _profilePicUpdateStatus
 
-    private val _addVehicleStatus = MutableLiveData<DataState<Nothing>>()
-    val addVehicleStatus: LiveData<DataState<Nothing>> = _addVehicleStatus
+    private val _addProdductStatus = MutableLiveData<DataState<Nothing>>()
+    val addProductStatus: LiveData<DataState<Nothing>> = _addProdductStatus
 
-//    private val _fetchVehicles = MutableLiveData<DataState<List<ModelVehicle>>>()
-//    val fetchVehicles: LiveData<DataState<List<ModelVehicle>>> = _fetchVehicles
+    private val _fetchProducts = MutableLiveData<DataState<List<ProductModel>>>()
+    val fetchProducts: LiveData<DataState<List<ProductModel>>> = _fetchProducts
 
     fun updateUser(user: ModelUser) {
         _updateStatus.value = DataState.Loading
@@ -85,6 +87,7 @@ class ProfileRepository @Inject constructor(
             }
     }
 
+
     private fun updateUserPref(uri: String) {
         val user = prefs.getUserData()
         if (user != null) {
@@ -93,41 +96,63 @@ class ProfileRepository @Inject constructor(
         }
     }
 
-    //Vehicles
-//
-//    fun addVehicle(vehicle: ModelVehicle) {
-//        _addVehicleStatus.value = DataState.Loading
-//        db.collection("users_vehicles").document(uid).collection("vehicles")
-//            .add(vehicle)
-//            .addOnSuccessListener {
-//                _addVehicleStatus.value = DataState.Success()
-//            }
-//            .addOnFailureListener {
-//                _addVehicleStatus.value = DataState.Error(it.message!!)
-//            }
-//    }
-//
-//    fun fetchVehicles() {
-//        _fetchVehicles.value = DataState.Loading
-//        db.collection("users_vehicles").document(uid).collection("vehicles")
-//            .addSnapshotListener { value, error ->
-//                if (error != null) {
-//                    _fetchVehicles.value = DataState.Error(error.message!!)
-//                    return@addSnapshotListener
-//                }
-//
-//                val vehiclesList = mutableListOf<ModelVehicle>()
-//                for (data in value?.documents!!) {
-//                    val vehicle = data.toObject(ModelVehicle::class.java)
-//                    if (vehicle != null) {
-//                        val docId = data.id
-//                        vehicle.docId = docId
-//                        vehiclesList.add(vehicle)
-//                    }
-//                }
-//
-//                _fetchVehicles.value = DataState.Success(vehiclesList)
-//            }
-//    }
+    //Products
+
+    fun uploadProductImage(product: ProductModel) {
+        val ref = storage.child("Product_images/${System.currentTimeMillis()}")
+
+        val bitmap = ImageUtils.uriToBitmap(context, product.productImgeUri.toUri())
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
+        val data = byteArrayOutputStream.toByteArray()
+
+        ref.putBytes(data).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                ref.downloadUrl.addOnSuccessListener { uri1 ->
+                    product.productImgeUri = uri1.toString()
+                    Toast.makeText(context, "image uploaded", Toast.LENGTH_SHORT).show()
+                    addProductToDB(product)
+                }
+            } else {
+                _addProdductStatus.value = DataState.Error(task.exception.toString())
+                Toast.makeText(context, "At image upload    "+ task.exception.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun addProductToDB(product:ProductModel) {
+        _addProdductStatus.value = DataState.Loading
+        db.collection("users_products").document(uid).collection("products")
+            .add(product)
+            .addOnSuccessListener {
+                _addProdductStatus.value = DataState.Success()
+            }
+            .addOnFailureListener {
+                _addProdductStatus.value = DataState.Error(it.message!!)
+            }
+    }
+
+    fun fetchProducts() {
+        _fetchProducts.value = DataState.Loading
+        db.collection("users_products").document(uid).collection("products")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                for (data in value?.documents!!) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        val docId = data.id
+                        product.docId = docId
+                        productsList.add(product)
+                    }
+                }
+
+                _fetchProducts.value = DataState.Success(productsList)
+            }
+    }
 
 }

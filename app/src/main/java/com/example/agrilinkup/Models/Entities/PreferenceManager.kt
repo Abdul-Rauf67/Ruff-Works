@@ -3,6 +3,7 @@ package com.example.agrilinkup.Models
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.agrilinkup.ModelUser
+import com.google.firebase.firestore.auth.User
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

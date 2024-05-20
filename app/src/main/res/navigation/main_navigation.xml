@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_userProductsFragment2_to_addProductListingFragment3"
             app:destination="@id/addProductListingFragment3" />
+        <action
+            android:id="@+id/action_userProductsFragment2_to_updateMyProductFragment"
+            app:destination="@id/updateMyProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment3"
@@ -57,4 +60,9 @@
         android:name="com.example.agrilinkup.View.Fragments.UserAccount.updateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
+    <fragment
+        android:id="@+id/updateMyProductFragment"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment"
+        android:label="fragment_update_my_product"
+        tools:layout="@layout/fragment_update_my_product" />
 </navigation>
