@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -43,7 +44,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/viewlayout"
             android:layout_width="match_parent"
-            android:layout_height="609dp"
+            android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:orientation="vertical"
             android:padding="15dp"
@@ -110,18 +111,19 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_below="@+id/txtHomeError"
-                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtFilter"
                 tools:layout_editor_absoluteX="-36dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:clipToPadding="false"
-                    android:scrollbars="vertical" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/product_listing_items" />
 
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -136,29 +138,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtTitleProducts"
                 tools:layout_editor_absoluteX="15dp" />
 
-            <include
-                android:id="@+id/item1"
-                layout="@layout/product_listing_items"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/txtFilter"
-                tools:layout_editor_absoluteX="15dp" />
 
-            <include
-                android:id="@+id/item2"
-                layout="@layout/product_listing_items"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/item1"
-                tools:layout_editor_absoluteX="15dp" />
-
-            <include
-                android:id="@+id/item3"
-                layout="@layout/product_listing_items"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/item2"
-                tools:layout_editor_absoluteX="15dp" />
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

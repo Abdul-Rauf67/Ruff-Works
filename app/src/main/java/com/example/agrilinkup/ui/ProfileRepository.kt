@@ -1,5 +1,6 @@
 package com.example.agrilinkup.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -12,7 +13,10 @@ import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.ImageUtils
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
@@ -38,6 +42,11 @@ class ProfileRepository @Inject constructor(
 
     private val _fetchProducts = MutableLiveData<DataState<List<ProductModel>>>()
     val fetchProducts: LiveData<DataState<List<ProductModel>>> = _fetchProducts
+
+    private val _fetchProductsListings = MutableLiveData<DataState<List<ProductModel>>>()
+    val fetchProductsListings: LiveData<DataState<List<ProductModel>>> = _fetchProductsListings
+
+    lateinit var userName: String
 
     fun updateUser(user: ModelUser) {
         _updateStatus.value = DataState.Loading
@@ -115,12 +124,16 @@ class ProfileRepository @Inject constructor(
                 }
             } else {
                 _addProdductStatus.value = DataState.Error(task.exception.toString())
-                Toast.makeText(context, "At image upload    "+ task.exception.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "At image upload    " + task.exception.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    fun addProductToDB(product:ProductModel) {
+    fun addProductToDB(product: ProductModel) {
         _addProdductStatus.value = DataState.Loading
         db.collection("users_products").document(uid).collection("products")
             .add(product)
@@ -155,4 +168,83 @@ class ProfileRepository @Inject constructor(
             }
     }
 
+
+    fun fetchProductListings() {
+        _fetchProductsListings.value = DataState.Loading
+        db.collectionGroup("products")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProductsListings.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                for (data in value?.documents!!) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        val docId = data.id
+                        product.docId = docId
+                        productsList.add(product)
+                    }
+                }
+
+                _fetchProductsListings.value = DataState.Success(productsList)
+            }
+    }
+
+    fun fetchProductListings(currentUserUid: String) {
+        _fetchProductsListings.value = DataState.Loading
+        db.collectionGroup("products")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProductsListings.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                if (value == null || value.isEmpty) {
+                    _fetchProductsListings.value = DataState.Success(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                for (data in value.documents) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        // Extract the user ID from the document path to determine the owner
+                        val docPath = data.reference.path
+                        val pathSegments = docPath.split("/")
+                        val userId = pathSegments[pathSegments.indexOf("users_products") + 1]
+
+                        // Skip products belonging to the current user
+                        if (userId != currentUserUid) {
+                            val task = db.collection("users").document(userId).get()
+                            tasks.add(task)
+
+                            task.addOnSuccessListener { documentSnapshot ->
+                                val user = documentSnapshot.toObject(ModelUser::class.java)
+                                if (user != null) {
+                                    val userName = user.fullName
+                                    val docId = data.id
+                                    product.docId = docId
+                                    product.user_ID = userId
+                                    product.productSellerName = userName
+                                    productsList.add(product)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Wait for all tasks to complete
+                Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                    _fetchProductsListings.value = DataState.Success(productsList)
+                }
+            }
+    }
+
 }
+
+
+

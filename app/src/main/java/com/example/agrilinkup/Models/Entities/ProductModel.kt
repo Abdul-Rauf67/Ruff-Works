@@ -17,7 +17,8 @@ data class ProductModel(
     var productseasonEndDate:String,
     var user_ID:String,
     var productUploadDateTime:String="",
-    var docId: String = ""
+    var docId: String = "",
+    var productSellerName:String=""
 ){
     constructor() : this("","","","",
         "","","","","","",

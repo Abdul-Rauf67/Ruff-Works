@@ -1,164 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.cardview.widget.CardView
+    <data>
+
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/card_view_vertical_margin"
-        android:layout_marginBottom="@dimen/card_view_vertical_margin"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        cardBackgroundColor="@android:color/white"
-        cardCornerRadius="@dimen/card_view_corner_radius"
-        cardElevation="@dimen/card_view_elevation">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_marginTop="@dimen/card_view_vertical_margin"
+            android:layout_marginBottom="@dimen/card_view_vertical_margin"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            cardBackgroundColor="@android:color/white"
+            cardCornerRadius="@dimen/card_view_corner_radius"
+            cardElevation="@dimen/card_view_elevation">
 
-            <RelativeLayout
-                android:layout_width="80dp"
-                android:layout_height="110dp"
-                >
-
-                <ImageView
-                    android:id="@+id/imgItemProductThumb"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:contentDescription="@string/prompt_product_name"
-                    android:gravity="top"
-                    android:src="@drawable/logo" />
-
-
-                <TextView
-                    android:maxHeight="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:text="out of stack" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="110dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:orientation="vertical">
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/txtItemProductName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="marquee"
-                    android:focusable="false"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/prompt_product_name"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="15sp" />
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="110dp">
+
+                    <ImageView
+                        android:id="@+id/imgItemProductThumb"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:contentDescription="@string/prompt_product_name"
+                        android:gravity="top"
+                        android:src="@drawable/logo" />
 
 
-                <TextView
-                    android:id="@+id/txtItemProductSeller"
+                    <TextView
+                        android:id="@+id/AvailableStatus"
+                        android:maxHeight="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:text="out of stack" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtItemProductName"
+                    android:layout_height="110dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="marquee"
-                    android:focusable="false"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/prompt_seller"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="15sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txtItemProductLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtItemProductSeller"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="marquee"
-                    android:focusable="false"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/prompt_location"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/txtItemProductName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="marquee"
+                        android:focusable="false"
+                        android:freezesText="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/prompt_product_name"
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtItemProductPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtItemProductLocation"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/prompt_price"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
 
-                <ImageButton
-                    android:background="@color/pink"
-                    android:id="@+id/add_to_cart"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/shipping_cart_icon"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="4dp" />
+                    <TextView
+                        android:id="@+id/txtItemProductSeller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtItemProductName"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="marquee"
+                        android:focusable="false"
+                        android:freezesText="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/prompt_seller"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="15sp" />
 
-                <ImageButton
-                    android:background="@color/green"
-                    android:id="@+id/goto_inbox"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_toStartOf="@+id/add_to_cart"
-                    android:src="@drawable/inbox_icon"/>
+                    <TextView
+                        android:id="@+id/txtItemProductLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtItemProductSeller"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="marquee"
+                        android:focusable="false"
+                        android:freezesText="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/prompt_location"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="15sp" />
 
-            </RelativeLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/txtItemProductPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtItemProductLocation"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:freezesText="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/prompt_price"
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-</LinearLayout>
+                    <ImageButton
+                        android:background="@color/pink"
+                        android:id="@+id/add_to_cart"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/shipping_cart_icon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="4dp" />
+
+                    <ImageButton
+                        android:background="@color/green"
+                        android:id="@+id/goto_inbox"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toStartOf="@+id/add_to_cart"
+                        android:src="@drawable/inbox_icon" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</layout>

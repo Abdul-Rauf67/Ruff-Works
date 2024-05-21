@@ -9,20 +9,32 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.utils.Glide
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.Activities.LoginActivity
+import com.example.agrilinkup.View.Adapters.AdapterMyProducts
+import com.example.agrilinkup.View.Adapters.AdapterProductsListings
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
 import com.example.agrilinkup.View.Fragments.MainFragment
 import com.example.agrilinkup.View.Fragments.UserAccount.ProfileFragment
+import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentHomeBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.Dialogs
+import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
+import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
 import com.example.agrilinkup.utils.gone
+import com.example.agrilinkup.utils.toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,6 +59,8 @@ class HomeFragment : Fragment() {
     lateinit var nameHeader:TextView
     lateinit var emailHeader:TextView
 
+    lateinit var vmProfile:VmProfile
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -65,6 +79,17 @@ class HomeFragment : Fragment() {
         binding= FragmentHomeBinding.inflate(inflater,container,false)
         auth= FirebaseModule_ProvideFirebaseAuthFactory.provideFirebaseAuth()
          val view= binding.root
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
+        val context=requireContext()
+        preferenceManager=prefs
+
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
+        vmProfile = VmProfile(profileRepo)
+        prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId) }
+        setUpObserver()
 
         preferenceManager= PreferenceManager(requireContext())
 
@@ -128,19 +153,9 @@ class HomeFragment : Fragment() {
         }
         setUpProfileImage()
 
-        binding.addProductsListings.setOnClickListener {
-
-            binding.drawerlsyout.visibility=View.INVISIBLE
-            val fragmentTansaction=childFragmentManager.beginTransaction()
-            val addProductListingFragment=AddProductListingFragment()
-            fragmentTansaction.replace(R.id.fragment_container,addProductListingFragment)
-            fragmentTansaction.addToBackStack(null)
-            fragmentTansaction.commit()
-
-
-            //findNavController().navigate(R.id.action_homeFragment_to_addProductListingFragment)
-
-        }
+            binding.addProductsListings.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment2_to_addProductListingFragment3)
+            }
     }
     private fun logout(): Boolean {
         Dialogs.logoutDialog(requireContext(), layoutInflater) {
@@ -183,6 +198,38 @@ class HomeFragment : Fragment() {
                 progressofImage.gone()
             }
         }
+    }
+
+    private fun setUpObserver() {
+        vmProfile.fetchProductsListings.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    val productsList = it.data
+                    if (!productsList.isNullOrEmpty()) {
+                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext())
+                    }
+//                    else {
+//                        binding.lyNoCars.visible()
+//                        binding.rvVehicles.gone()
+//                    }
+                    dismissProgressDialog()
+                }
+
+                is DataState.Error -> {
+                    toast(it.errorMessage)
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    showProgressDialog()
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
 
 }

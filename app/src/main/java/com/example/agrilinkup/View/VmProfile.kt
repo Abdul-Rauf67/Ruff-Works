@@ -18,6 +18,7 @@ class VmProfile @Inject constructor(
     val userPicUpdate = profileRepository.profilePicUpdate
     val addProductStatus = profileRepository.addProductStatus
     val fetchProduct = profileRepository.fetchProducts
+    val fetchProductsListings=profileRepository.fetchProductsListings
 
     fun updateUser(user: ModelUser) {
         viewModelScope.launch {
@@ -40,6 +41,12 @@ class VmProfile @Inject constructor(
     fun fetchProducts() {
         viewModelScope.launch {
             profileRepository.fetchProducts()
+        }
+    }
+
+    fun fetchProductsListings(currentUserUid: String){
+        viewModelScope.launch {
+            profileRepository.fetchProductListings(currentUserUid)
         }
     }
 }
