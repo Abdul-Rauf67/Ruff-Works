@@ -65,6 +65,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/onItmeClickLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="110dp"
                     android:layout_gravity="center_vertical"

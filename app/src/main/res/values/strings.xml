@@ -27,6 +27,7 @@
     <!-- Strings related to view Titles -->
 
     <string name="title_fragment_sell_product">Sell a Product</string>
+    <string name="product_details">Product Details</string>
 
     <!-- Strings related to products -->
     <string name="prompt_filter">Filter</string>
@@ -34,7 +35,7 @@
     <string name="prompt_product_name">Product Name</string>
     <string name="prompt_description">Description</string>
     <string name="prompt_location">Location</string>
-    <string name="prompt_quantity">Quantity</string>
+    <string name="prompt_quantity">QuantityInKG</string>
     <string name="prompt_unit">Unit</string>
     <string name="prompt_price">Price</string>
     <string name="prompt_seller">Seller</string>

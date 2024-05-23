@@ -1,7 +1,10 @@
 package com.example.agrilinkup.Models.Entities
 
+import android.os.Parcelable
 import androidx.core.location.LocationRequestCompat.Quality
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ProductModel(
     var productImgeUri:String,
     var productTitle:String,
@@ -19,7 +22,7 @@ data class ProductModel(
     var productUploadDateTime:String="",
     var docId: String = "",
     var productSellerName:String=""
-){
+): Parcelable {
     constructor() : this("","","","",
         "","","","","","",
         "","","","")

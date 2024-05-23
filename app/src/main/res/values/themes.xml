@@ -15,4 +15,7 @@
     <style name="Theme.AgriLinkUp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AgriLinkUp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/rounded_corner</item>
+    </style>
 </resources>

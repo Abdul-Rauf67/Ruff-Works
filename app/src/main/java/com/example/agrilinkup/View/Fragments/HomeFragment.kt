@@ -1,6 +1,7 @@
 package com.example.agrilinkup
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +12,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.recyclerViewItemClickListener
 import com.example.agrilinkup.utils.Glide
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.Activities.LoginActivity
@@ -21,6 +25,7 @@ import com.example.agrilinkup.View.Adapters.AdapterMyProducts
 import com.example.agrilinkup.View.Adapters.AdapterProductsListings
 import com.example.agrilinkup.View.Fragments.AddProductListingFragment
 import com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment
+import com.example.agrilinkup.View.Fragments.HomeProduct.ProductDetailsFragment
 import com.example.agrilinkup.View.Fragments.MainFragment
 import com.example.agrilinkup.View.Fragments.UserAccount.ProfileFragment
 import com.example.agrilinkup.View.VmProfile
@@ -60,6 +65,8 @@ class HomeFragment : Fragment() {
     lateinit var emailHeader:TextView
 
     lateinit var vmProfile:VmProfile
+    lateinit var productsList:List<ProductModel>
+    lateinit var product:ProductModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,11 +133,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.navView.setNavigationItemSelectedListener { menuItem->
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
 
 
-
-            when(menuItem.itemId) {
+            when (menuItem.itemId) {
 
                 R.id.nav_profile ->
                     (parentFragment as MainFragment)
@@ -138,14 +144,15 @@ class HomeFragment : Fragment() {
 
                 R.id.chat_messages ->
                     (parentFragment as MainFragment)
-                        .replaceFragmentsInViewpager(Chat_Messages_Fragment(),1)
+                        .replaceFragmentsInViewpager(Chat_Messages_Fragment(), 1)
 
                 R.id.chatsfragment123 ->
                     (parentFragment as MainFragment)
-                        .replaceFragmentsInViewpager(ChatFragment(),1)
+                        .replaceFragmentsInViewpager(ChatFragment(), 1)
 
                 R.id.nav_logout ->
                     logout()
+
                 else -> {
                     (parentFragment as MainFragment).switchToFragment(0)
                 }
@@ -153,9 +160,24 @@ class HomeFragment : Fragment() {
         }
         setUpProfileImage()
 
-            binding.addProductsListings.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment2_to_addProductListingFragment3)
-            }
+        binding.addProductsListings.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment2_to_addProductListingFragment3)
+        }
+
+//        binding.recyclerView.addOnItemTouchListener(
+//            recyclerViewItemClickListener(requireContext(), binding.recyclerView,
+//                object : recyclerViewItemClickListener.OnItemClickListener {
+//                    override fun onItemClick(view: View, position: Int) {
+//                        TODO("Not yet implemented")
+//                    }
+//
+//                    override fun onItemLongClick(view: View?, position: Int) {
+//                        val product=productsList[position]
+//                        preferenceManager.saveTempProduct(product)
+//                        findNavController().navigate(R.id.action_mainFragment2_to_productDetailsFragment)
+//                    }
+//                })
+//        )
     }
     private fun logout(): Boolean {
         Dialogs.logoutDialog(requireContext(), layoutInflater) {
@@ -204,9 +226,10 @@ class HomeFragment : Fragment() {
         vmProfile.fetchProductsListings.observe(viewLifecycleOwner) {
             when (it) {
                 is DataState.Success -> {
-                    val productsList = it.data
+                    productsList = it.data!!
                     if (!productsList.isNullOrEmpty()) {
-                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext())
+                        val navigater=findNavController()
+                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext(),navigater)
                     }
 //                    else {
 //                        binding.lyNoCars.visible()
