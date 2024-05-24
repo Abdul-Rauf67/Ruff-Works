@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
 import com.example.agrilinkup.Models.Entities.recyclerViewItemClickListener
 import com.example.agrilinkup.utils.Glide
 import com.example.agrilinkup.Models.PreferenceManager
@@ -56,7 +57,8 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     lateinit var auth: FirebaseAuth
     @Inject
-    lateinit var preferenceManager: PreferenceManager
+    lateinit var preferenceManager: ProductSharedPreferance
+    lateinit var prefs:PreferenceManager
 
     //Navigation Header Views
     lateinit var  imageview1:ImageView
@@ -86,19 +88,18 @@ class HomeFragment : Fragment() {
         binding= FragmentHomeBinding.inflate(inflater,container,false)
         auth= FirebaseModule_ProvideFirebaseAuthFactory.provideFirebaseAuth()
          val view= binding.root
-        val prefs= PreferenceManager(requireContext())
+        prefs= PreferenceManager(requireContext())
         val auth= FirebaseAuth.getInstance()
         val db= FirebaseFirestore.getInstance()
         val storage= FirebaseStorage.getInstance().getReference()
         val context=requireContext()
-        preferenceManager=prefs
 
         val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
         vmProfile = VmProfile(profileRepo)
         prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId) }
         setUpObserver()
 
-        preferenceManager= PreferenceManager(requireContext())
+        preferenceManager= ProductSharedPreferance(requireContext())
 
 
         var navigation=binding.navView
@@ -211,7 +212,7 @@ class HomeFragment : Fragment() {
 
 
     private fun setUpProfileImage() {
-        val user = preferenceManager.getUserData()
+        val user = prefs.getUserData()
         user?.let {
             binding.toolbar.subtitle = it.fullName
             nameHeader.text=user.fullName

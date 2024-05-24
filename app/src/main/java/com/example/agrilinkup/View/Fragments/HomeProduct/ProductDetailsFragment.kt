@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
 import com.example.agrilinkup.databinding.FragmentProductDetailsBinding
@@ -29,7 +30,7 @@ class ProductDetailsFragment : Fragment() {
     private var param2: String? = null
     private lateinit var binding: FragmentProductDetailsBinding
     lateinit var product:ProductModel
-    lateinit var preferenceManager: PreferenceManager
+    lateinit var preferenceManager: ProductSharedPreferance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class ProductDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
 
         binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
-        preferenceManager=PreferenceManager(requireContext())
+        preferenceManager=ProductSharedPreferance(requireContext())
         return binding.root
 
     }

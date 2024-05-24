@@ -12,6 +12,7 @@ data class ModelUser(
     val accountType: String,
     val phoneNumber: String,
     var profileImageUri: String,
+    var imageName:String="",
     var docId: String = ""
 ) {
     constructor() : this(email="", "", "", "", "", "", "","","")

@@ -31,15 +31,4 @@ class PreferenceManager @Inject constructor(@ApplicationContext private val cont
         val json = myPref.getString(KEY_USER, null)
         return gson.fromJson(json, ModelUser::class.java)
     }
-
-    fun saveTempProduct(product:ProductModel){
-        val json = gson.toJson(product)
-        myPref.edit().putString(KEY_USER, json).apply()
-    }
-
-    fun getProduct():ProductModel?{
-        val json = myPref.getString(KEY_USER, null)
-        return gson.fromJson(json, ProductModel::class.java)
-    }
-
 }

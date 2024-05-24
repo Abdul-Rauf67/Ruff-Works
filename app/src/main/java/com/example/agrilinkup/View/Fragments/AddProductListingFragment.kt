@@ -250,21 +250,6 @@ class AddProductListingFragment : Fragment() {
             productseasonEndDate.ifEmpty("Select product selling season ending date") -> false
             productStatus.ifEmpty("Type your product Status Such as Available, OutOfStack,etc.") -> false
 
-
-            !isImageChanged -> {
-                toast("Please Select an Image!")
-                false
-            }
-
-//            !productSeason.equals("No") -> {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Select product selling Season",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                false
-//            }
-
             else -> {
                 true
             }

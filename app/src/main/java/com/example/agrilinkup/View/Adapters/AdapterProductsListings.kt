@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
 import com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment
@@ -78,7 +79,7 @@ class AdapterProductsListings(private val items: List<ProductModel>,val context:
             })
 
             binding.onItmeClickLayout.setOnClickListener(View.OnClickListener {
-                val preferenceManager=PreferenceManager(context)
+                val preferenceManager=ProductSharedPreferance(context)
                 preferenceManager.saveTempProduct(product)
                 navigator.navigate(R.id.action_mainFragment2_to_productDetailsFragment)
             })

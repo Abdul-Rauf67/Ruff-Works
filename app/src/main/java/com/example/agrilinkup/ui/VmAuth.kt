@@ -2,6 +2,7 @@ package com.example.agrilinkup
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
@@ -88,6 +89,7 @@ class VmAuth @Inject constructor(
             if (task.isSuccessful) {
                 ref.downloadUrl.addOnSuccessListener { uri1 ->
                     user.profileImageUri = uri1.toString()
+                    user.imageName=getImageNameFromUri(uri1)
                     Toast.makeText(context, "image uploaded", Toast.LENGTH_SHORT).show()
                     addUserToDb(user)
                 }
@@ -97,6 +99,10 @@ class VmAuth @Inject constructor(
             }
         }
     }
+     private fun getImageNameFromUri(uri: Uri): String {
+         val path = uri.path
+         return path?.substring(path.lastIndexOf('/') + 1) ?: ""
+     }
 
     private fun addUserToDb(user: ModelUser) {
         db.collection("users").document(auth.currentUser?.uid!!).set(user)

@@ -19,9 +19,10 @@ data class ProductModel(
     var productSeasonStartDate:String,
     var productseasonEndDate:String,
     var user_ID:String,
-    var productUploadDateTime:String="",
     var docId: String = "",
-    var productSellerName:String=""
+    var productSellerName:String="",
+    var productImageName:String="",
+    var productUploadDateTime:String=""
 ): Parcelable {
     constructor() : this("","","","",
         "","","","","","",

@@ -19,6 +19,8 @@ class VmProfile @Inject constructor(
     val addProductStatus = profileRepository.addProductStatus
     val fetchProduct = profileRepository.fetchProducts
     val fetchProductsListings=profileRepository.fetchProductsListings
+    val updateProductStatus=profileRepository.updateProductStatus
+    val prodcutPicUpdateStatus=profileRepository.prodcutPicUpdateStatus
 
     fun updateUser(user: ModelUser) {
         viewModelScope.launch {
@@ -26,9 +28,19 @@ class VmProfile @Inject constructor(
         }
     }
 
-    fun updatePic(uri: Uri) {
+    fun updateProduct(product:ProductModel){
         viewModelScope.launch {
-            profileRepository.uploadUpdatedProfilePhoto(uri)
+            profileRepository.updateProduct(product)
+        }
+    }
+    fun uploadUpdateProductImage(uri: Uri,oldImageUri: Uri,product: ProductModel){
+        viewModelScope.launch {
+            profileRepository.uploadUpdateProductImage(uri,oldImageUri,product)
+        }
+    }
+    fun updatePic(uri: Uri,oldImageUri:Uri) {
+        viewModelScope.launch {
+            profileRepository.uploadUpdatedProfilePhoto(uri,oldImageUri)
         }
     }
 

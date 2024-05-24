@@ -113,7 +113,8 @@ class UserProductsFragment : Fragment() {
                 is DataState.Success -> {
                     val productsList = it.data
                     if (!productsList.isNullOrEmpty()) {
-                        binding.recyclerViewProductItems.adapter =AdapterMyProducts(productsList,requireContext())
+                        val navigator=findNavController()
+                        binding.recyclerViewProductItems.adapter =AdapterMyProducts(productsList,requireContext(),navigator)
                       }
 //                    else {
 //                        binding.lyNoCars.visible()

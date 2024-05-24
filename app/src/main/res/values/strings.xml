@@ -20,6 +20,7 @@
 
     <!-- String related to selling -->
     <string name="action_product_sell">Sell Product</string>
+    <string name="updateProductBtn">Update Product</string>
     <string name="action_product_upload">Upload Product Picture</string>
     <string name="error_sell_product">Please fill up all fields</string>
     <string name="error_product_image">Please upload product picture</string>
@@ -27,6 +28,7 @@
     <!-- Strings related to view Titles -->
 
     <string name="title_fragment_sell_product">Sell a Product</string>
+    <string name="updateMyProduct">Update your Product</string>
     <string name="product_details">Product Details</string>
 
     <!-- Strings related to products -->

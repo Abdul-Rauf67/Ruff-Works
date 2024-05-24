@@ -1,5 +1,6 @@
 package com.example.agrilinkup.View.Fragments.UserAccount
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.View.VmProfile
@@ -44,6 +46,7 @@ class ProfileFragment : Fragment() {
     @Inject
     lateinit var preferenceManager: PreferenceManager
     private lateinit var vmProfile: VmProfile
+    lateinit var oldImageUri:Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +93,7 @@ class ProfileFragment : Fragment() {
             val completeAddress:String=user.address+",  " +user.district+",  " +user.state
             binding.addressReg.text=completeAddress
             binding.accountType.text=user.accountType
+            oldImageUri=user.profileImageUri.toUri()
 
             Glide.loadImageWithListener(
                 requireContext(),
@@ -125,6 +129,8 @@ class ProfileFragment : Fragment() {
                 is DataState.Loading -> {
                     showProgressDialog()
                 }
+
+                else -> {}
             }
         }
     }
@@ -155,7 +161,7 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 binding.imgProfilePic.setImageURI(uri)
-                vmProfile.updatePic(uri)
+                vmProfile.updatePic(uri,oldImageUri)
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
