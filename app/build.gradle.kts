@@ -127,6 +127,21 @@ dependencies {
     //Gson
     implementation ("com.google.code.gson:gson:2.10.1")
 
+    //Shimmer effect
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    //Chat voice player
+    implementation("com.github.JagarYousef:ChatVoicePlayer:1.1.0")
+
+    //Chat audio record view with animations
+    implementation("com.github.3llomi:RecordView:3.1.3")
+
+    //Dots Indicator for Viewpager + Recyclerview
+    implementation ("me.relex:circleindicator:2.1.6")
+
+    //Carousel recycler view
+    implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
+
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.6.1")

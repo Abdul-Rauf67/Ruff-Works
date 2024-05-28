@@ -8,13 +8,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.agrilinkup.ChatFragment
 import com.example.agrilinkup.View.Fragments.UserAccount.UserAccountFragment
+import com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment
 
 class ViewPagerAdapter(fragmentManager:FragmentManager,lifeCycle:Lifecycle):
     FragmentStateAdapter(fragmentManager,lifeCycle) {
 
         private var fragments = arrayListOf(
             HomeFragment(),
-            ChatFragment(),
+            MessagesUserListFragment(),
             CartFragment(),
             UserAccountFragment()
         )

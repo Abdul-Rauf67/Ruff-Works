@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_mainFragment2_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_messagesChatFragment"
+            app:destination="@id/messagesChatFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment"
@@ -73,4 +76,23 @@
         android:name="com.example.agrilinkup.View.Fragments.HomeProduct.ProductDetailsFragment"
         android:label="fragment_product_details"
         tools:layout="@layout/fragment_product_details" />
+    <fragment
+        android:id="@+id/messagesChatFragment"
+        android:name="com.example.flame.ui.fragments.messages.chat.MessagesChatFragment"
+        android:label="MessagesChatFragment" >
+        <action
+            android:id="@+id/action_messagesChatFragment_to_messagesImageViewerFragment"
+            app:destination="@id/messagesImageViewerFragment" />
+        <action
+            android:id="@+id/action_messagesChatFragment_to_messagesVideoPlayFragment"
+            app:destination="@id/messagesVideoPlayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesImageViewerFragment"
+        android:name="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesImageViewerFragment"
+        android:label="MessagesImageViewerFragment" />
+    <fragment
+        android:id="@+id/messagesVideoPlayFragment"
+        android:name="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesVideoPlayFragment"
+        android:label="MessagesVideoPlayFragment" />
 </navigation>

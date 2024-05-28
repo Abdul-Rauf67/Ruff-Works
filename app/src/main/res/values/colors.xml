@@ -10,6 +10,8 @@
     <color name="colorPrimaryDark">#3F51B5</color>
     <color name="colorAccent">#81123727</color>
     <color name="background">#FF6C02</color>
+    <color name="primary_color">#ED694A</color>
+    <color name="colorTransparent">#0000ffff</color>
 
     <color name="purple">#FF673AB7</color>
     <color name="blue">#0099ff</color>
@@ -37,9 +39,19 @@
     <color name="color_primary">#1C92FF</color>
 
     <color name="color_splash_screen">#FFFFFFFF</color>
+    <color name="edittext_bg_color">#F1F1F1</color>
+    <color name="tvColor">@color/black</color>
+    <color name="backgroundColor">@color/white</color>
+    <color name="logoBgColor">@color/black</color>
+    <color name="trackBgColor">#FDE7DE</color>
+    <color name="dialogBgColor">@color/white</color>
+    <color name="messageItemColor">#EDEDED</color>
+    <color name="backgroundColor2">#F2F2F2</color>
 
     //status bar
     <color name="color_status_bar">@color/white</color>
+    <color name="chat_item_left_color">#FEDBD2</color>
+    <color name="chat_item_right_color">#FDEBE7</color>
 
     //Text view and edit text
     <color name="color_textview">@color/black</color>

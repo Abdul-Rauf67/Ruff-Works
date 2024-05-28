@@ -23,4 +23,14 @@ object DateTimeUtils {
         return dateFormat.format(selectedDate)
     }
 
+    fun formatDateTime(timestamp: Long, pattern: String = "hh:mm a"): String {
+        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+        val date = Date(timestamp)
+        return dateFormat.format(date)
+    }
+
+    fun simpleDateFormat():String{
+        return SimpleDateFormat("yyyy_mm_dd_hh_mm_ss", Locale.getDefault()).format(Date())
+    }
+
 }

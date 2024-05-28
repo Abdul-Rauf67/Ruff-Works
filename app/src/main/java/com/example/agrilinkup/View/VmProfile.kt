@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.agrilinkup.ModelUser
+import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.ui.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,9 @@ class VmProfile @Inject constructor(
     val fetchProductsListings=profileRepository.fetchProductsListings
     val updateProductStatus=profileRepository.updateProductStatus
     val prodcutPicUpdateStatus=profileRepository.prodcutPicUpdateStatus
+    val AddToCortProducts=profileRepository.AddToCortProducts
+    val fetchCartProducts=profileRepository.fetchCartProducts
+
 
     fun updateUser(user: ModelUser) {
         viewModelScope.launch {
@@ -59,6 +63,17 @@ class VmProfile @Inject constructor(
     fun fetchProductsListings(currentUserUid: String){
         viewModelScope.launch {
             profileRepository.fetchProductListings(currentUserUid)
+        }
+    }
+
+    fun addProductToCart(cartModel: CartModel) {
+        viewModelScope.launch {
+            profileRepository.addProductToCart(cartModel)
+        }
+    }
+    fun fetchProductsOfCart() {
+        viewModelScope.launch {
+            profileRepository.fetchProductsOfCart()
         }
     }
 }
