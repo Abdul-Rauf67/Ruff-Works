@@ -6,13 +6,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
 import com.example.agrilinkup.Models.PreferenceManager
-import com.example.agrilinkup.R
+import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentProductDetailsBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
+import com.example.agrilinkup.utils.ProgressDialogUtil
+import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
+import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +44,9 @@ class ProductDetailsFragment : Fragment() {
     private var param2: String? = null
     private lateinit var binding: FragmentProductDetailsBinding
     lateinit var product:ProductModel
+    private lateinit var vmProfile: VmProfile
+    val db = Firebase.firestore
+    val auth = Firebase.auth
     lateinit var preferenceManager: ProductSharedPreferance
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +75,7 @@ class ProductDetailsFragment : Fragment() {
 
         product= preferenceManager.getProduct()!!
 
+
         if (product!=null) {
             val productName =
                 product.productTitle + "  " + product.productSubTitle + "   " + product.productQuality
@@ -75,8 +93,72 @@ class ProductDetailsFragment : Fragment() {
             binding.discription.text = product.productDiscription
             binding.status.text = product.productStatus
 
+            if (product.tempValue.equals("CartFragment")){
+                goToCartOperations()
+            }else{
+                goToProductListingOperations()
+            }
+
         }
     }
+
+
+    private fun goToCartOperations(){
+        binding.button2.text="Delete From Cart"
+        binding.button2.setOnClickListener{
+            db.collection("products_at_cart")
+                .document(auth.uid!!)
+                .collection("products")
+                .document(product.cartItemID)
+                .delete()
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun goToProductListingOperations(){
+        binding.button2.setOnClickListener{
+            addToCart()
+        }
+    }
+    private fun addToCart(){
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
+
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, requireContext())
+        vmProfile = VmProfile(profileRepo)
+        val cartItem= CartModel(
+            product.user_ID,
+            product.docId
+        )
+        vmProfile.addProductToCart(cartItem)
+        findNavController().popBackStack()
+     //   setUpObserver()
+    }
+    private fun setUpObserver() {
+        vmProfile.AddToCortProducts.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    Toast.makeText(context,"Added to Cart", Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
+                    findNavController().popBackStack()
+                }
+
+                is DataState.Error -> {
+                    Toast.makeText(context,it.errorMessage, Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    showProgressDialog()
+                }
+
+            }
+        }
+    }
+
+
 
     companion object {
         /**
@@ -99,7 +181,6 @@ class ProductDetailsFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-
         binding.unbind()
     }
 }

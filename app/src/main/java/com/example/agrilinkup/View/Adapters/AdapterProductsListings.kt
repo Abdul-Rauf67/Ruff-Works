@@ -8,29 +8,48 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
 import com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment
+import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.ItemMyProductListingsBinding
 import com.example.agrilinkup.databinding.ProductListingItemsBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
+import com.example.agrilinkup.utils.ProgressDialogUtil
+import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
+import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
 import com.example.agrilinkup.utils.gone
+import com.example.agrilinkup.utils.toast
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlin.properties.Delegates
-
-class AdapterProductsListings(private val items: List<ProductModel>,val context: Context,val navigator: NavController) :
+import com.example.agrilinkup.utils.toast
+class AdapterProductsListings(private val items: List<ProductModel>,
+                              val context: Context,
+                              val navigator: NavController,
+                              val lifecycleOwner12: LifecycleOwner,
+                              val  fragmentManager12: FragmentManager) :
     RecyclerView.Adapter<AdapterProductsListings.ViewHolder>() {
 
+    private lateinit var vmProfile: VmProfile
     val db = Firebase.firestore
     val auth = Firebase.auth
     //val preferenceManager=PreferenceManager(context)
@@ -45,6 +64,7 @@ class AdapterProductsListings(private val items: List<ProductModel>,val context:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = items[position]
+
         holder.bind(data)
     }
 
@@ -73,6 +93,10 @@ class AdapterProductsListings(private val items: List<ProductModel>,val context:
                 Glide.with(context)
                     .load(product.productImgeUri)
                     .into(image)
+                val btnCart=view.findViewById<Button>(R.id.button2)
+                btnCart.setOnClickListener{
+                    addToCart(product)
+                }
                 builder.setView(view)
                 builder.setCanceledOnTouchOutside(true)
                 builder.show()
@@ -84,8 +108,48 @@ class AdapterProductsListings(private val items: List<ProductModel>,val context:
                 navigator.navigate(R.id.action_mainFragment2_to_productDetailsFragment)
             })
 
+            binding.addToCart.setOnClickListener{
+                addToCart(product)
+            }
+
 //            deleteProduct(product.docId)
 //            updateProduct(product.docId)
+        }
+        private fun addToCart(product: ProductModel){
+            val prefs= PreferenceManager(context)
+            val auth= FirebaseAuth.getInstance()
+            val db= FirebaseFirestore.getInstance()
+            val storage= FirebaseStorage.getInstance().getReference()
+            val context=context
+
+            val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
+            vmProfile = VmProfile(profileRepo)
+            val cartItem=CartModel(
+                product.user_ID,
+                product.docId
+            )
+            vmProfile.addProductToCart(cartItem)
+            setUpObserver()
+        }
+        private fun setUpObserver() {
+            vmProfile.AddToCortProducts.observe(lifecycleOwner12) {
+                when (it) {
+                    is DataState.Success -> {
+                        Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
+                        dismissProgressDialog()
+                    }
+
+                    is DataState.Error -> {
+                        Toast.makeText(context,it.errorMessage,Toast.LENGTH_SHORT).show()
+                        ProgressDialogUtil.dismissProgressDialog()
+                    }
+
+                    is DataState.Loading -> {
+                        ProgressDialogUtil.showProgressDialog(fragmentManager12)
+                    }
+
+                }
+            }
         }
 
 

@@ -77,6 +77,8 @@ class AdapterMyProducts(private val items: List<ProductModel>,val context: Conte
                     .document(product.docId)
                     .delete()
 
+
+
             }
         }
         private fun getImageNameFromUri(uri: Uri): String {

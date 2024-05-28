@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.agrilinkup.ModelUser
+import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.utils.DataState
@@ -56,6 +57,12 @@ class ProfileRepository @Inject constructor(
     private val _fetchProductsListings = MutableLiveData<DataState<List<ProductModel>>>()
     val fetchProductsListings: LiveData<DataState<List<ProductModel>>> = _fetchProductsListings
 
+    private val _AddToCartProducts = MutableLiveData<DataState<Nothing>>()
+    val AddToCortProducts: LiveData<DataState<Nothing>> = _AddToCartProducts
+
+    private val _fetchCartProducts = MutableLiveData<DataState<List<ProductModel>>>()
+    val fetchCartProducts: LiveData<DataState<List<ProductModel>>> = _fetchCartProducts
+
     lateinit var userName: String
 
     fun updateUser(user: ModelUser) {
@@ -71,9 +78,7 @@ class ProfileRepository @Inject constructor(
             }
     }
 
-
-
-    fun uploadUpdatedProfilePhoto(uri: Uri,oldImageUri: Uri) {
+    fun uploadUpdatedProfilePhoto(uri: Uri, oldImageUri: Uri) {
         _profilePicUpdateStatus.value = DataState.Loading
         val ref = storage.child("profile_images/${System.currentTimeMillis()}")
 
@@ -87,9 +92,9 @@ class ProfileRepository @Inject constructor(
                 if (it.isSuccessful) {
                     ref.downloadUrl.addOnSuccessListener { downloadedUri ->
                         if (downloadedUri != null) {
-                            val imageName= getImageNameFromUri(downloadedUri)
-                            val oldImageName=getImageNameFromUri(oldImageUri)
-                            updateProfilePhoto(downloadedUri.toString(),imageName,oldImageName)
+                            val imageName = getImageNameFromUri(downloadedUri)
+                            val oldImageName = getImageNameFromUri(oldImageUri)
+                            updateProfilePhoto(downloadedUri.toString(), imageName, oldImageName)
                         }
                     }
                 } else {
@@ -97,12 +102,13 @@ class ProfileRepository @Inject constructor(
                 }
             }
     }
+
     private fun getImageNameFromUri(uri: Uri): String {
         val path = uri.path
         return path?.substring(path.lastIndexOf('/') + 1) ?: ""
     }
 
-    private fun updateProfilePhoto(uri: String,imageName:String,oldImageName:String) {
+    private fun updateProfilePhoto(uri: String, imageName: String, oldImageName: String) {
         db.collection("users").document(uid)
             .update("profileImageUri", uri)
             .addOnSuccessListener {
@@ -110,7 +116,7 @@ class ProfileRepository @Inject constructor(
                 db.collection("users").document(uid)
                     .update("imageName", imageName)
                     .addOnSuccessListener {
-                        updateUserPref(uri,imageName)
+                        updateUserPref(uri, imageName)
                         deleteOldProfileImage(oldImageName)
                         _profilePicUpdateStatus.value = DataState.Success()
                     }
@@ -139,12 +145,11 @@ class ProfileRepository @Inject constructor(
             }
     }
 
-
-    private fun updateUserPref(uri: String,imageName: String) {
+    private fun updateUserPref(uri: String, imageName: String) {
         val user = prefs.getUserData()
         if (user != null) {
             user.profileImageUri = uri
-            user.imageName=imageName
+            user.imageName = imageName
             prefs.saveUserData(user)
         }
     }
@@ -163,7 +168,7 @@ class ProfileRepository @Inject constructor(
             if (task.isSuccessful) {
                 ref.downloadUrl.addOnSuccessListener { uri1 ->
                     product.productImgeUri = uri1.toString()
-                    product.productImageName=getImageNameFromUri(uri1)
+                    product.productImageName = getImageNameFromUri(uri1)
                     Toast.makeText(context, "image uploaded", Toast.LENGTH_SHORT).show()
                     addProductToDB(product)
                 }
@@ -205,7 +210,8 @@ class ProfileRepository @Inject constructor(
                     if (product != null) {
                         val docId = data.id
                         product.docId = docId
-                        product.productImageName=getImageNameFromUri(product.productImgeUri.toUri())
+                        product.productImageName =
+                            getImageNameFromUri(product.productImgeUri.toUri())
                         productsList.add(product)
                     }
                 }
@@ -276,7 +282,8 @@ class ProfileRepository @Inject constructor(
                                     product.docId = docId
                                     product.user_ID = userId
                                     product.productSellerName = userName
-                                    product.productImageName=getImageNameFromUri(product.productImgeUri.toUri())
+                                    product.productImageName =
+                                        getImageNameFromUri(product.productImgeUri.toUri())
                                     productsList.add(product)
                                 }
                             }
@@ -292,7 +299,7 @@ class ProfileRepository @Inject constructor(
     }
 
 
-    fun uploadUpdateProductImage(uri: Uri,oldImageUri: Uri,product: ProductModel) {
+    fun uploadUpdateProductImage(uri: Uri, oldImageUri: Uri, product: ProductModel) {
         _porductPicUpdateStatus.value = DataState.Loading
         val ref = storage.child("Product_images/${System.currentTimeMillis()}")
 
@@ -303,7 +310,7 @@ class ProfileRepository @Inject constructor(
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
         val data = byteArrayOutputStream.toByteArray()
-        var imageName:String=""
+        var imageName: String = ""
 
         // Upload the new image
         ref.putBytes(data)
@@ -319,7 +326,12 @@ class ProfileRepository @Inject constructor(
 
                             imageNameUri = getImageNameFromUri(oldImageUri)
 
-                            updateProductPhoto(downloadedUri.toString(), imageName,imageNameUri,product)
+                            updateProductPhoto(
+                                downloadedUri.toString(),
+                                imageName,
+                                imageNameUri,
+                                product
+                            )
 
                         }
                     }
@@ -333,7 +345,13 @@ class ProfileRepository @Inject constructor(
                 _porductPicUpdateStatus.value = DataState.Success()
             }
     }
-    private fun updateProductPhoto(uri: String,imageName:String,oldImageUri:String,product: ProductModel) {
+
+    private fun updateProductPhoto(
+        uri: String,
+        imageName: String,
+        oldImageUri: String,
+        product: ProductModel
+    ) {
 
 //        db.collection("users_products").document(uid).collection("products").document(product.docId)
 //            .addSnapshotListener { value, error ->
@@ -343,25 +361,25 @@ class ProfileRepository @Inject constructor(
 //                    val imageUri=productfetched.productImgeUri
 //                    imageNameUri=getImageNameFromUri(imageUri.toUri())
 //                }
+        db.collection("users_products").document(uid).collection("products")
+            .document(product.docId)
+            .update("productImgeUri", uri)
+            .addOnSuccessListener {
+
                 db.collection("users_products").document(uid).collection("products")
                     .document(product.docId)
-                    .update("productImgeUri", uri)
+                    .update("productImageName", imageName)
                     .addOnSuccessListener {
 
-                        db.collection("users_products").document(uid).collection("products")
-                            .document(product.docId)
-                            .update("productImageName", imageName)
-                            .addOnSuccessListener {
-
-                              deleteOldProductImage(oldImageUri)
-                            }
-                            .addOnFailureListener {
-                                _porductPicUpdateStatus.value = DataState.Error(it.message!!)
-                            }
+                        deleteOldProductImage(oldImageUri)
                     }
                     .addOnFailureListener {
                         _porductPicUpdateStatus.value = DataState.Error(it.message!!)
                     }
+            }
+            .addOnFailureListener {
+                _porductPicUpdateStatus.value = DataState.Error(it.message!!)
+            }
     }
 
     private fun deleteOldProductImage(imageName: String) {
@@ -392,7 +410,222 @@ class ProfileRepository @Inject constructor(
     }
 
 
+    fun addProductToCart(cartModel: CartModel) {
+        _AddToCartProducts.value = DataState.Loading
+        db.collection("products_at_cart").document(uid).collection("products")
+            .add(cartModel)
+            .addOnSuccessListener {
+                _AddToCartProducts.value = DataState.Success()
+            }
+            .addOnFailureListener {
+                _AddToCartProducts.value = DataState.Error(it.message!!)
+            }
+    }
+
+    fun fetchProductsOfCart3() {
+        _fetchCartProducts.value = DataState.Loading
+
+        db.collection("products_at_cart").document(uid).collection("products")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    _fetchCartProducts.value = DataState.Success(emptyList())
+                    return@addOnSuccessListener
+                }
+
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+                val productsList = mutableListOf<ProductModel>()
+
+                for (data in snapshot.documents) {
+                    val cartItem = data.toObject(CartModel::class.java)
+                    cartItem?.let {
+                        val task = db.collection("users_products")
+                            .document(cartItem.user_ID_ofProduct)
+                            .collection("products")
+                            .document(cartItem.docId_ofProduct)
+                            .get()
+
+                        tasks.add(task)
+
+                        task.addOnSuccessListener { documentSnapshot ->
+                            val product = documentSnapshot.toObject(ProductModel::class.java)
+                            product?.let { p ->
+                                p.docId = cartItem.docId_ofProduct
+                                p.user_ID = cartItem.user_ID_ofProduct
+                                p.cartItemID = documentSnapshot.id
+                                productsList.add(p)
+
+                                // Check if all tasks are complete
+                                if (tasks.all { it.isComplete }) {
+                                    // All tasks are complete, update the state
+                                    _fetchCartProducts.value = DataState.Success(productsList)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { error ->
+                _fetchCartProducts.value = DataState.Error(error.message ?: "Unknown error occurred")
+            }
+    }
+
+
+    fun fetchProductsOfCart2() {
+        _fetchCartProducts.value = DataState.Loading
+        val productsList = mutableListOf<ProductModel>()
+        db.collection("products_at_cart").document(uid).collection("products")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchCartProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+                if (value == null || value.isEmpty) {
+                    _fetchCartProducts.value = DataState.Success(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                value.documents.forEach { data ->
+                    val cartItem = data.toObject(CartModel::class.java)
+                    if (cartItem != null) {
+                        val task = db.collection("users_products")
+                            .document(cartItem.user_ID_ofProduct)
+                            .collection("products")
+                            .document(cartItem.docId_ofProduct)
+                            .get()
+                        tasks.add(task)
+
+                        task.addOnSuccessListener { documentSnapshot ->
+                            val product = documentSnapshot.toObject(ProductModel::class.java)
+                            if (product != null) {
+                                product.docId = cartItem.docId_ofProduct
+                                product.user_ID = cartItem.user_ID_ofProduct
+                                product.cartItemID = documentSnapshot.id
+                                // Update UI or do other
+                                productsList.add(product)
+                            }
+                        }
+                    }
+                }
+            }
+        _fetchCartProducts.value = DataState.Success(productsList)
+    }
+
+
+    fun fetchProductsOfCart1() {
+        _fetchCartProducts.value = DataState.Loading
+
+        val productsList = mutableListOf<ProductModel>()
+
+        db.collection("products_at_cart").document(uid).collection("cartItem")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot != null && !querySnapshot.isEmpty) {
+                    val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                    querySnapshot.documents.forEach { cartItemDoc ->
+                        val cartItem = cartItemDoc.toObject(CartModel::class.java)
+
+                        if (cartItem != null) {
+                            val userID= cartItem.user_ID_ofProduct
+                            val docId= cartItem.docId_ofProduct
+                            val task = db.collection("users_products")
+                                .document(userID)
+                                .collection("products")
+                                .document(docId)
+                                .get()
+
+                            tasks.add(task)
+
+                            task.addOnSuccessListener { productDoc ->
+                                val product = productDoc.toObject(ProductModel::class.java)
+                                if (product != null) {
+                                    product.docId = userID
+                                    product.user_ID = docId
+                                   // product.cartItemID = (link unavailable)
+
+                                    productsList.add(product)
+                                }
+                            }
+                        }
+                    }
+
+                    _fetchCartProducts.value = DataState.Success(productsList)
+                } else {
+                    _fetchCartProducts.value = DataState.Success(emptyList())
+                }
+            }
+            .addOnFailureListener { exception ->
+                _fetchCartProducts.value = DataState.Error(exception.message!!)
+            }
+    }
+
+    fun fetchProductsOfCart() {
+        _fetchCartProducts.value = DataState.Loading
+
+        db.collection("products_at_cart").document(uid).collection("products")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    _fetchCartProducts.value = DataState.Success(emptyList())
+                    return@addOnSuccessListener
+                }
+
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+                val productsList = mutableListOf<ProductModel>()
+
+                for (data in snapshot.documents) {
+                    val cartItem = data.toObject(CartModel::class.java)
+                    cartItem?.let {
+                        val cartItem_id=data.id
+                        val task = db.collection("users_products")
+                            .document(cartItem.user_ID_ofProduct)
+                            .collection("products")
+                            .document(cartItem.docId_ofProduct)
+                            .get()
+
+                        tasks.add(task)
+
+                        task.addOnSuccessListener { documentSnapshot ->
+                            val product = documentSnapshot.toObject(ProductModel::class.java)
+                            product?.let { p ->
+                                p.docId = cartItem.docId_ofProduct
+                                p.user_ID = cartItem.user_ID_ofProduct
+                                p.cartItemID=cartItem_id
+
+                                // Fetch user data
+                                val userTask = db.collection("users")
+                                    .document(cartItem.user_ID_ofProduct)
+                                    .get()
+
+                                tasks.add(userTask)
+
+                                userTask.addOnSuccessListener { userDocument ->
+                                    val user = userDocument.toObject(ModelUser::class.java)
+                                    user?.let { u ->
+                                        val userName = u.fullName
+                                        p.productSellerName = userName
+                                        p.productImageName = getImageNameFromUri(p.productImgeUri.toUri())
+                                        productsList.add(p)
+
+                                        // Check if all tasks are complete
+                                        if (tasks.all { it.isComplete }) {
+                                            // All tasks are complete, update the state
+                                            _fetchCartProducts.value = DataState.Success(productsList)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { error ->
+                _fetchCartProducts.value = DataState.Error(error.message ?: "Unknown error occurred")
+            }
+    }
+
+
 }
-
-
-

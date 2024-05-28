@@ -22,7 +22,12 @@ data class ProductModel(
     var docId: String = "",
     var productSellerName:String="",
     var productImageName:String="",
-    var productUploadDateTime:String=""
+    var productUploadDateTime:String="",
+    var cartItemID:String="",
+    var tempValue:String=""
+//    val  cart_Id:String="",
+//      val      docId_ofProduct:String="",
+//        val    user_ID_ofProduct:String=""
 ): Parcelable {
     constructor() : this("","","","",
         "","","","","","",

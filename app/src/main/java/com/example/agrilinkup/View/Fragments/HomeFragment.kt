@@ -230,7 +230,8 @@ class HomeFragment : Fragment() {
                     productsList = it.data!!
                     if (!productsList.isNullOrEmpty()) {
                         val navigater=findNavController()
-                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext(),navigater)
+                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext(),
+                            navigater,viewLifecycleOwner,childFragmentManager)
                     }
 //                    else {
 //                        binding.lyNoCars.visible()
