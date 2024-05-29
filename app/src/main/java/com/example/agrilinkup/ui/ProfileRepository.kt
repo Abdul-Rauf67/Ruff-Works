@@ -12,9 +12,11 @@ import androidx.lifecycle.MutableLiveData
 import com.example.agrilinkup.ModelUser
 import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.ImageUtils
+import com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -62,6 +64,12 @@ class ProfileRepository @Inject constructor(
 
     private val _fetchCartProducts = MutableLiveData<DataState<List<ProductModel>>>()
     val fetchCartProducts: LiveData<DataState<List<ProductModel>>> = _fetchCartProducts
+
+    private val _AddUserToUserChatList = MutableLiveData<DataState<Nothing>>()
+    val AddUserToUserChatList: LiveData<DataState<Nothing>> = _AddUserToUserChatList
+
+    private val _fetchUserToUserChatList = MutableLiveData<DataState<List<ProductModel>>>()
+    val fetchUserToUserChatList: LiveData<DataState<List<ProductModel>>> = _fetchUserToUserChatList
 
     lateinit var userName: String
 
@@ -409,158 +417,29 @@ class ProfileRepository @Inject constructor(
             }
     }
 
-
     fun addProductToCart(cartModel: CartModel) {
         _AddToCartProducts.value = DataState.Loading
-        db.collection("products_at_cart").document(uid).collection("products")
-            .add(cartModel)
-            .addOnSuccessListener {
-                _AddToCartProducts.value = DataState.Success()
-            }
-            .addOnFailureListener {
-                _AddToCartProducts.value = DataState.Error(it.message!!)
-            }
-    }
-
-    fun fetchProductsOfCart3() {
-        _fetchCartProducts.value = DataState.Loading
-
-        db.collection("products_at_cart").document(uid).collection("products")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.isEmpty) {
-                    _fetchCartProducts.value = DataState.Success(emptyList())
-                    return@addOnSuccessListener
-                }
-
-                val tasks = mutableListOf<Task<DocumentSnapshot>>()
-                val productsList = mutableListOf<ProductModel>()
-
-                for (data in snapshot.documents) {
-                    val cartItem = data.toObject(CartModel::class.java)
-                    cartItem?.let {
-                        val task = db.collection("users_products")
-                            .document(cartItem.user_ID_ofProduct)
-                            .collection("products")
-                            .document(cartItem.docId_ofProduct)
-                            .get()
-
-                        tasks.add(task)
-
-                        task.addOnSuccessListener { documentSnapshot ->
-                            val product = documentSnapshot.toObject(ProductModel::class.java)
-                            product?.let { p ->
-                                p.docId = cartItem.docId_ofProduct
-                                p.user_ID = cartItem.user_ID_ofProduct
-                                p.cartItemID = documentSnapshot.id
-                                productsList.add(p)
-
-                                // Check if all tasks are complete
-                                if (tasks.all { it.isComplete }) {
-                                    // All tasks are complete, update the state
-                                    _fetchCartProducts.value = DataState.Success(productsList)
-                                }
-                            }
-                        }
+        val cartRef = db.collection("products_at_cart").document(uid).collection("products").document(cartModel.docId_ofProduct)
+        cartRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                // Product already in cart, update quantity or show error message
+                _AddToCartProducts.value = DataState.Error("Already Added to Cart")
+                //_AddToCartProducts.value = DataState.Success() // Product already in cart
+            } else {
+                cartRef.set(cartModel)
+                    .addOnSuccessListener {
+                        _AddToCartProducts.value = DataState.Success()
                     }
-                }
-            }
-            .addOnFailureListener { error ->
-                _fetchCartProducts.value = DataState.Error(error.message ?: "Unknown error occurred")
-            }
-    }
-
-
-    fun fetchProductsOfCart2() {
-        _fetchCartProducts.value = DataState.Loading
-        val productsList = mutableListOf<ProductModel>()
-        db.collection("products_at_cart").document(uid).collection("products")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    _fetchCartProducts.value = DataState.Error(error.message!!)
-                    return@addSnapshotListener
-                }
-                if (value == null || value.isEmpty) {
-                    _fetchCartProducts.value = DataState.Success(emptyList())
-                    return@addSnapshotListener
-                }
-
-                val tasks = mutableListOf<Task<DocumentSnapshot>>()
-
-                value.documents.forEach { data ->
-                    val cartItem = data.toObject(CartModel::class.java)
-                    if (cartItem != null) {
-                        val task = db.collection("users_products")
-                            .document(cartItem.user_ID_ofProduct)
-                            .collection("products")
-                            .document(cartItem.docId_ofProduct)
-                            .get()
-                        tasks.add(task)
-
-                        task.addOnSuccessListener { documentSnapshot ->
-                            val product = documentSnapshot.toObject(ProductModel::class.java)
-                            if (product != null) {
-                                product.docId = cartItem.docId_ofProduct
-                                product.user_ID = cartItem.user_ID_ofProduct
-                                product.cartItemID = documentSnapshot.id
-                                // Update UI or do other
-                                productsList.add(product)
-                            }
-                        }
+                    .addOnFailureListener { exception ->
+                        _AddToCartProducts.value = DataState.Error(exception.message!!)
                     }
-                }
             }
-        _fetchCartProducts.value = DataState.Success(productsList)
+        }
     }
 
 
-    fun fetchProductsOfCart1() {
-        _fetchCartProducts.value = DataState.Loading
 
-        val productsList = mutableListOf<ProductModel>()
 
-        db.collection("products_at_cart").document(uid).collection("cartItem")
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot != null && !querySnapshot.isEmpty) {
-                    val tasks = mutableListOf<Task<DocumentSnapshot>>()
-
-                    querySnapshot.documents.forEach { cartItemDoc ->
-                        val cartItem = cartItemDoc.toObject(CartModel::class.java)
-
-                        if (cartItem != null) {
-                            val userID= cartItem.user_ID_ofProduct
-                            val docId= cartItem.docId_ofProduct
-                            val task = db.collection("users_products")
-                                .document(userID)
-                                .collection("products")
-                                .document(docId)
-                                .get()
-
-                            tasks.add(task)
-
-                            task.addOnSuccessListener { productDoc ->
-                                val product = productDoc.toObject(ProductModel::class.java)
-                                if (product != null) {
-                                    product.docId = userID
-                                    product.user_ID = docId
-                                   // product.cartItemID = (link unavailable)
-
-                                    productsList.add(product)
-                                }
-                            }
-                        }
-                    }
-
-                    _fetchCartProducts.value = DataState.Success(productsList)
-                } else {
-                    _fetchCartProducts.value = DataState.Success(emptyList())
-                }
-            }
-            .addOnFailureListener { exception ->
-                _fetchCartProducts.value = DataState.Error(exception.message!!)
-            }
-    }
 
     fun fetchProductsOfCart() {
         _fetchCartProducts.value = DataState.Loading
@@ -626,6 +505,20 @@ class ProfileRepository @Inject constructor(
                 _fetchCartProducts.value = DataState.Error(error.message ?: "Unknown error occurred")
             }
     }
+
+
+    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel) {
+        _AddUserToUserChatList.value = DataState.Loading
+        val userChatListRef = db.collection("Users_At_Chat").document(uid).collection("User").document(chatUserListDataModel.UserUid)
+        userChatListRef.set(chatUserListDataModel)
+            .addOnSuccessListener {
+                _AddUserToUserChatList.value = DataState.Success()
+            }
+            .addOnFailureListener { exception ->
+                _AddUserToUserChatList.value = DataState.Error(exception.message!!)
+            }
+    }
+
 
 
 }

@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.R
-import com.example.agrilinkup.Utils.utils.VisibilityUtils.show
-import com.example.agrilinkup.Utils.utils.gone
+//import com.example.agrilinkup.Utils.utils.VisibilityUtils.show
+//import com.example.agrilinkup.Utils.utils.gone
 import com.example.agrilinkup.databinding.FragmentMessagesUsersBinding
 import com.example.flame.ui.fragments.messages.adapters.MessagesUserListAdapter
 
@@ -56,8 +56,8 @@ class MessagesUserListFragment : Fragment() {
             binding.recyclerView.apply {
                 adapter = messagesUserListAdapter
                 binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.gone()
-                this.show()
+              //  binding.shimmerLayout.gone()
+              //  this.show()
             }
         }
     }

@@ -7,12 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.agrilinkup.Models.Entities.messages.MessagesListDataModel
+import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.R
 import com.example.agrilinkup.utils.DateTimeUtils
 
 
-class MessagesUserListAdapter(private val messagesList: ArrayList<MessagesListDataModel>,
+class MessagesUserListAdapter(private val messagesList: ArrayList<ChatUserListDataModel>,
                               private val callback: (name:String,uid:String,profileImageLink:String) -> Unit) :
     RecyclerView.Adapter<MessagesUserListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,7 +33,7 @@ class MessagesUserListAdapter(private val messagesList: ArrayList<MessagesListDa
         private val profileImage:ImageView = itemView.findViewById(R.id.messageProfileImg)
         private val lastSms:TextView = itemView.findViewById(R.id.messageItemSms)
         private val smsTime:TextView = itemView.findViewById(R.id.messageItemTime)
-        fun bin(data: MessagesListDataModel){
+        fun bin(data: ChatUserListDataModel){
             userName.text = data.name
             smsTime.text = DateTimeUtils.formatDateTime(data.smsTime)
 
@@ -42,7 +42,7 @@ class MessagesUserListAdapter(private val messagesList: ArrayList<MessagesListDa
                 .into(profileImage)
 
             itemView.setOnClickListener {
-                callback.invoke(data.name,data.uid,data.profileImgLink)
+               // callback.invoke(data.name,data.uid,data.profileImgLink)
             }
         }
     }

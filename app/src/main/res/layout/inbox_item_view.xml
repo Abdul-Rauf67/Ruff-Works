@@ -88,32 +88,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
+
+        <TextView
+            android:backgroundTint="#4DAC9D"
+            android:id="@+id/NumSMS"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:foregroundGravity="center"
-            app:cardBackgroundColor="#4DAC9D"
-            app:cardCornerRadius="20dp"
-            app:cardPreventCornerOverlap="true"
+            android:layout_gravity="right"
+            android:background="@drawable/circular_background_drawable"
+            android:gravity="center"
+            android:maxHeight="20dp"
+            android:padding="1dp"
+            android:paddingRight="5dp"
+            android:text="10"
+            android:textSize="6pt"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/NumSMS"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:maxHeight="20dp"
-                android:padding="1dp"
-                android:paddingRight="5dp"
-                android:text="10"
-                android:textSize="6pt"
-                tools:layout_editor_absoluteX="167dp"
-                tools:layout_editor_absoluteY="188dp" />
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <ImageView
             android:id="@+id/imageView3"

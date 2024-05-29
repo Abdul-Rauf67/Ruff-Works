@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.agrilinkup.ModelUser
 import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.ui.ProfileRepository
+import com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment
+import com.example.flame.ui.fragments.messages.userlist.MessagesUserListVm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +27,7 @@ class VmProfile @Inject constructor(
     val prodcutPicUpdateStatus=profileRepository.prodcutPicUpdateStatus
     val AddToCortProducts=profileRepository.AddToCortProducts
     val fetchCartProducts=profileRepository.fetchCartProducts
+    val AddUserToUserChatList=profileRepository.AddUserToUserChatList
 
 
     fun updateUser(user: ModelUser) {
@@ -76,4 +80,14 @@ class VmProfile @Inject constructor(
             profileRepository.fetchProductsOfCart()
         }
     }
+    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel) {
+        viewModelScope.launch {
+            profileRepository.addUserToUserChatList(chatUserListDataModel)
+        }
+    }
+//    fun fetchUserFormUserChatList() {
+//        viewModelScope.launch {
+//            profileRepository.fetchUserFormUserChatList()
+//        }
+//    }
 }

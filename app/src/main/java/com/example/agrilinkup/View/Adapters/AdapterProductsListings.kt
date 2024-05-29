@@ -1,7 +1,6 @@
 package com.example.agrilinkup.View.Adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,35 +12,29 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.agrilinkup.ModelUser
 import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
+import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
-import com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment
 import com.example.agrilinkup.View.VmProfile
-import com.example.agrilinkup.databinding.ItemMyProductListingsBinding
 import com.example.agrilinkup.databinding.ProductListingItemsBinding
 import com.example.agrilinkup.ui.ProfileRepository
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.ProgressDialogUtil
 import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
 import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
-import com.example.agrilinkup.utils.gone
-import com.example.agrilinkup.utils.toast
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlin.properties.Delegates
-import com.example.agrilinkup.utils.toast
+
 class AdapterProductsListings(private val items: List<ProductModel>,
                               val context: Context,
                               val navigator: NavController,
@@ -111,9 +104,65 @@ class AdapterProductsListings(private val items: List<ProductModel>,
             binding.addToCart.setOnClickListener{
                 addToCart(product)
             }
+            binding.gotoInbox.setOnClickListener {
+                addChatUserAtUserChatList(product)
+            }
 
 //            deleteProduct(product.docId)
 //            updateProduct(product.docId)
+        }
+
+        private fun addChatUserAtUserChatList(product: ProductModel){
+            db.collection("users").document(product.user_ID)
+                .get().addOnSuccessListener { documentSnapshot ->
+                    val user = documentSnapshot.toObject(ModelUser::class.java)
+                    if (user != null) {
+                        val docId = documentSnapshot.id
+                        user.docId = docId
+                        addItemChat(product,user)
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(context,it.message!!,Toast.LENGTH_SHORT).show()
+                }
+        }
+        private fun addItemChat(product: ProductModel,user: ModelUser){
+            val prefs= PreferenceManager(context)
+            val auth= FirebaseAuth.getInstance()
+            val db= FirebaseFirestore.getInstance()
+            val storage= FirebaseStorage.getInstance().getReference()
+            val context=context
+
+            val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
+            vmProfile = VmProfile(profileRepo)
+            val UserData=ChatUserListDataModel(
+                user.fullName,
+                user.profileImageUri,
+                product.user_ID,
+                product.docId
+            )
+            vmProfile.addUserToUserChatList(UserData)
+            userAddObserver()
+        }
+
+        private fun userAddObserver() {
+            vmProfile.AddUserToUserChatList.observe(lifecycleOwner12) {
+                when (it) {
+                    is DataState.Success -> {
+                        Toast.makeText(context,"User added to chatList",Toast.LENGTH_SHORT).show()
+                        dismissProgressDialog()
+                    }
+
+                    is DataState.Error -> {
+                        Toast.makeText(context,it.errorMessage,Toast.LENGTH_SHORT).show()
+                        dismissProgressDialog()
+                    }
+
+                    is DataState.Loading -> {
+                        showProgressDialog(fragmentManager12)
+                    }
+
+                }
+            }
         }
         private fun addToCart(product: ProductModel){
             val prefs= PreferenceManager(context)
@@ -131,6 +180,8 @@ class AdapterProductsListings(private val items: List<ProductModel>,
             vmProfile.addProductToCart(cartItem)
             setUpObserver()
         }
+
+
         private fun setUpObserver() {
             vmProfile.AddToCortProducts.observe(lifecycleOwner12) {
                 when (it) {
