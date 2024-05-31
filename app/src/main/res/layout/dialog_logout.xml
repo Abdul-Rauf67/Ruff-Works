@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/color_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/_25sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:background="@color/color_background">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            app:srcCompat="@drawable/icon_profile_logout" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/open_sans_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="Oh no! You're leaving...\nAre you sure?" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNo"
+            android:layout_width="@dimen/_185sdp"
+            android:layout_height="@dimen/_38sdp"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/color_primary"
+            android:text="Naah,  Just kidding"
+            android:textAllCaps="false"
+            android:textSize="17sp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/open_sans_regular" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnYes"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_38sdp"
+            android:background="@drawable/bg_button"
+            app:backgroundTint="#F54336"
+            android:text="Yes, Log Me Out"
+            android:textAllCaps="false"
+            android:textSize="17sp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/open_sans_regular" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

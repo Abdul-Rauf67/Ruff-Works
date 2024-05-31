@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/mainFragment2">
+
+    <fragment
+        android:id="@+id/chat_Messages_Fragment2"
+        android:name="com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment"
+        android:label="Chat_Messages_Fragment" />
+    <fragment
+        android:id="@+id/userOrdersFragment2"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UserOrdersFragment"
+        android:label="UserOrdersFragment" />
+    <fragment
+        android:id="@+id/userProductsFragment2"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UserProductsFragment"
+        android:label="UserProductsFragment" >
+        <action
+            android:id="@+id/action_userProductsFragment2_to_addProductListingFragment3"
+            app:destination="@id/addProductListingFragment3" />
+        <action
+            android:id="@+id/action_userProductsFragment2_to_updateMyProductFragment"
+            app:destination="@id/updateMyProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment3"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/addProductListingFragment3"
+        android:name="com.example.agrilinkup.View.Fragments.AddProductListingFragment"
+        android:label="AddProductListingFragment" />
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="com.example.agrilinkup.View.Fragments.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment2_to_profileFragment3"
+            app:destination="@id/profileFragment3" />
+        <action
+            android:id="@+id/action_mainFragment2_to_chat_Messages_Fragment2"
+            app:destination="@id/chat_Messages_Fragment2" />
+        <action
+            android:id="@+id/action_mainFragment2_to_userOrdersFragment2"
+            app:destination="@id/userOrdersFragment2" />
+        <action
+            android:id="@+id/action_mainFragment2_to_userProductsFragment2"
+            app:destination="@id/userProductsFragment2" />
+        <action
+            android:id="@+id/action_mainFragment2_to_addProductListingFragment3"
+            app:destination="@id/addProductListingFragment3" />
+        <action
+            android:id="@+id/action_mainFragment2_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_messagesChatFragment"
+            app:destination="@id/messagesChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.updateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" />
+    <fragment
+        android:id="@+id/updateMyProductFragment"
+        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment"
+        android:label="fragment_update_my_product"
+        tools:layout="@layout/fragment_update_my_product" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.agrilinkup.View.Fragments.HomeProduct.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" >
+        <action
+            android:id="@+id/action_productDetailsFragment_to_messagesChatFragment"
+            app:destination="@id/messagesChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesChatFragment"
+        android:name="com.example.flame.ui.fragments.messages.chat.MessagesChatFragment"
+        android:label="MessagesChatFragment" >
+        <action
+            android:id="@+id/action_messagesChatFragment_to_messagesImageViewerFragment"
+            app:destination="@id/messagesImageViewerFragment" />
+        <action
+            android:id="@+id/action_messagesChatFragment_to_messagesVideoPlayFragment"
+            app:destination="@id/messagesVideoPlayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesImageViewerFragment"
+        android:name="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesImageViewerFragment"
+        android:label="MessagesImageViewerFragment" />
+    <fragment
+        android:id="@+id/messagesVideoPlayFragment"
+        android:name="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesVideoPlayFragment"
+        android:label="MessagesVideoPlayFragment" />
+</navigation>

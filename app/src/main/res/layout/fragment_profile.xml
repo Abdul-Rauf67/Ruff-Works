@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ProfileFragment">
+        tools:context=".View.Fragments.UserAccount.ProfileFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,28 +39,64 @@
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
                 tools:layout_editor_absoluteX="0dp">
 
-
-                <com.example.agrilinkup.CircularImageView
-                    android:id="@+id/image_circular"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/image_one"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgProfilePic"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_120sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:src="@drawable/logo_profile_pic_placeholder"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.501"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck" />
+
+                <ProgressBar
+                    android:id="@+id/pgProfileImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/imgProfilePic"
+                    app:layout_constraintEnd_toEndOf="@+id/imgProfilePic"
+                    app:layout_constraintStart_toStartOf="@+id/imgProfilePic"
+                    app:layout_constraintTop_toTopOf="@+id/imgProfilePic" />
 
                 <ImageButton
+                    android:id="@+id/btnPickPhoto"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="112dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="12dp"
                     android:background="@drawable/circular_background_drawable"
                     android:padding="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_menu_camera"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@+id/imgProfilePic" />
+
+                <!--
+
+                                <com.example.agrilinkup.CircularImageView
+                                    android:id="@+id/image_circular"
+                                    android:layout_width="200dp"
+                                    android:layout_height="200dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/image_one"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ProgressBar
+                                    android:id="@+id/pgProfileImage"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintBottom_toBottomOf="@+id/image_circular"
+                                    app:layout_constraintEnd_toEndOf="@+id/image_circular"
+                                    app:layout_constraintStart_toStartOf="@+id/image_circular"
+                                    app:layout_constraintTop_toTopOf="@+id/image_circular" />
+
+
+
+
+                                    -->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

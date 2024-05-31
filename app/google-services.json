@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "414901295849",
+    "firebase_url": "https://agrilinkup-6787-default-rtdb.firebaseio.com",
+    "project_id": "agrilinkup-6787",
+    "storage_bucket": "agrilinkup-6787.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414901295849:android:514083a939d06f86dfee78",
+        "android_client_info": {
+          "package_name": "com.example.agrilinkup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwHFL9ME55nT7F07BNImr68gaiLAxgEls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

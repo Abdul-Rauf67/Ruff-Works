@@ -18,6 +18,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/UserItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -30,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/UserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -38,24 +39,25 @@
             android:maxHeight="35dp"
             android:text="Name"
             android:textSize="12pt"
-            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintEnd_toStartOf="@+id/LastMessageTime"
             app:layout_constraintHorizontal_bias="0.094"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-
+            android:id="@+id/LastMessageTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="162dp"
+            android:paddingStart="3dp"
             android:text="LastMessage"
             android:textSize="8pt"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +66,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/LastMessageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -82,44 +84,35 @@
             android:layout_gravity="right"
             android:maxHeight="20dp"
             android:padding="1dp"
-            android:text="online"
             android:textSize="6pt"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/LastMessageTime" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
+
+        <TextView
+            android:visibility="gone"
+            android:backgroundTint="#4DAC9D"
+            android:id="@+id/NumSMS"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:foregroundGravity="center"
-            app:cardBackgroundColor="#4DAC9D"
-            app:cardCornerRadius="20dp"
-            app:cardPreventCornerOverlap="true"
+            android:layout_gravity="right"
+            android:background="@drawable/circular_background_drawable"
+            android:gravity="center"
+            android:maxHeight="20dp"
+            android:padding="1dp"
+            android:paddingRight="5dp"
+            android:text="10"
+            android:textSize="6pt"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/NumSMS"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:maxHeight="20dp"
-                android:padding="1dp"
-                android:paddingRight="5dp"
-                android:text="10"
-                android:textSize="6pt"
-                tools:layout_editor_absoluteX="167dp"
-                tools:layout_editor_absoluteY="188dp" />
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:paddingTop="1dp"
-            app:layout_constraintEnd_toStartOf="@+id/cardView2"
+            app:layout_constraintEnd_toStartOf="@+id/NumSMS"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 

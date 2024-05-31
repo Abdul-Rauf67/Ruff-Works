@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -40,17 +41,34 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imgSellProduct"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/image_height"
-                    android:layout_marginBottom="@dimen/fragment_vertical_margin"
-                    android:contentDescription="@string/prompt_product_image"
-                    android:src="@drawable/ic_add_a_photo_black_70dp"
-                    android:background="@android:color/darker_gray"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerInside" />
+                    android:layout_height="wrap_content"
+                    >
+
+                    <ImageView
+                        android:id="@+id/imgSellProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/image_height"
+                        android:background="@android:color/darker_gray"
+                        android:clickable="true"
+                        android:contentDescription="@string/prompt_product_image"
+                        android:focusable="true"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="-16dp" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/add_product_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add_a_photo_black_70dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imgSellProduct"
+                        app:layout_constraintEnd_toEndOf="@+id/imgSellProduct" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <TextView
                     android:id="@+id/txtSellError"
@@ -193,16 +211,18 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:layout_weight="2">
 
 
-                        <Spinner
-                            android:layout_marginTop="6dp"
-                            android:text="Season"
-                            android:id="@+id/SeasonSpinner"
+                        <TextView
+                            android:id="@+id/season"
+                            android:textSize="@dimen/_12sdp"
+                            android:gravity="center"
+                            android:text="Product Selling Season"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:imeActionId="6"
+                            android:layout_height="wrap_content"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -212,7 +232,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
-                        <TextView
+                        <EditText
                             android:gravity="center"
                             android:layout_marginTop="6dp"
                             android:id="@+id/seasonStart"
@@ -229,7 +249,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
-                        <TextView
+                        <EditText
                             android:gravity="center"
                             android:layout_marginTop="6dp"
                             android:id="@+id/seasonEnd"

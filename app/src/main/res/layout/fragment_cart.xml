@@ -11,74 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CartFragment">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp"
             >
-
-            <include
-                android:id="@+id/item1"
-                layout="@layout/product_listing_items_at_cart"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refreshCartItems"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="0dp" />
+                android:layout_height="match_parent">
 
-            <include
-            android:id="@+id/item2"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item1"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item3"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item2"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item4"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item3"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item5"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item4"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item6"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item5"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item7"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item6"
-            tools:layout_editor_absoluteX="15dp" />
-        <include
-            android:id="@+id/item8"
-            layout="@layout/product_listing_items_at_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/item7"
-            tools:layout_editor_absoluteX="15dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cartRecyclerView"
 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:layout_editor_absoluteX="57dp"
+                tools:layout_editor_absoluteY="272dp"
+                tools:listitem="@layout/product_listing_items_at_cart"></androidx.recyclerview.widget.RecyclerView>
 
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_products_listings"
+                android:id="@+id/add_products_toCart"
                 android:layout_marginBottom="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_width="wrap_content"

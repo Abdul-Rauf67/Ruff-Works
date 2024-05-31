@@ -47,6 +47,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageButton" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="right|bottom"
+            android:id="@+id/linkDataIcon"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/chat_clip_logo"
+            app:layout_constraintBottom_toBottomOf="@+id/messageEditText"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2" />
+
+
     </androidx.cardview.widget.CardView>
 
     <com.example.agrilinkup.CircularImageView

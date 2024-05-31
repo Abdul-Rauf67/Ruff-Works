@@ -1,19 +1,44 @@
 package com.example.agrilinkup.View.Fragments
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.agrilinkup.HomeFragment
+import com.example.agrilinkup.MainActivity
+import com.example.agrilinkup.ModelUser
+import com.example.agrilinkup.Models.Entities.ProductModel
+import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
+import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentAddProductListingBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
+import com.example.agrilinkup.utils.KeyboardUtils.hideKeyboard
+import com.example.agrilinkup.utils.ProgressDialogUtil
+import com.example.agrilinkup.utils.ifEmpty
+import com.example.agrilinkup.utils.toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +56,14 @@ class AddProductListingFragment : Fragment() {
     private var param2: String? = null
 
     lateinit var binding: FragmentAddProductListingBinding
+    private lateinit var profileImgUri: Uri
+
+
+    @Inject
+    lateinit var preferenceManager: PreferenceManager
+    private lateinit var auth: FirebaseAuth
+
+    private lateinit var vmProfile: VmProfile
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,68 +78,68 @@ class AddProductListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       // return inflater.inflate(R.layout.fragment_add_product_listing, container, false)
+        // return inflater.inflate(R.layout.fragment_add_product_listing, container, false)
 
-        binding= FragmentAddProductListingBinding.inflate(inflater,container,false)
+        binding = FragmentAddProductListingBinding.inflate(inflater, container, false)
+        val prefs = PreferenceManager(requireContext())
+        auth = FirebaseAuth.getInstance()
+        val db = FirebaseFirestore.getInstance()
+        val storage = FirebaseStorage.getInstance().getReference()
+        val context = requireContext()
+        val profileRepository = ProfileRepository(db, auth, prefs, storage, context)
+        vmProfile = VmProfile(profileRepository)
+
+        preferenceManager = PreferenceManager(requireContext())
+
+        inIt()
         return binding.root
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun inIt() {
+        inIt1()
+        setOnClickListener()
+        setUpObserver()
+    }
+
+    private fun inIt1() {
 
 
-
-        var Seasons= arrayOf("Season","Spring","Summer","Fall(Autumn)","Winter")
-        if (binding.SeasonSpinner!=null) {
-            var adapter1= ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,Seasons)
-            binding.SeasonSpinner.adapter = adapter1
-            1.also { binding.SeasonSpinner.id = it }
-            binding.SeasonSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
-                    //Toast.makeText(requireContext(),"Spinner Position: ${position} and Season :${Seasons[position]}",Toast.LENGTH_LONG).show()
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("Not yet implemented")
-                }
-            }
-        }
 
         binding.seasonStart.setOnClickListener(View.OnClickListener {
             var cal = Calendar.getInstance()
             var dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 var month1 = month + 1
                 var msg = "$dayOfMonth/$month1/$year"
-                binding.seasonStart.text=msg
+                binding.seasonStart.setText(msg)
             }
-            DatePickerDialog(requireContext(),dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         })
         binding.seasonEnd.setOnClickListener(View.OnClickListener {
             var cal = Calendar.getInstance()
             var dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 var month1 = month + 1
                 var msg = "$dayOfMonth/$month1/$year"
-                binding.seasonEnd.text=msg
+                binding.seasonEnd.setText(msg)
+
             }
-            DatePickerDialog(requireContext(),dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(), dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         })
 
 
 
         binding.cancel.setOnClickListener {
-            bactToHomeFragment()
-        //findNavController().navigate(R.id.action_addProductListingFragment_to_homeFragment)
+            findNavController().popBackStack()
+            //findNavController().navigate(R.id.action_addProductListingFragment_to_homeFragment)
         }
     }
-    fun bactToHomeFragment(){
-        binding.fragmentAddProductListing.visibility = View.INVISIBLE
-        val fragmentTansaction = childFragmentManager.beginTransaction()
-        fragmentTansaction.replace(R.id.fragmentAddProdusts_Container, HomeFragment())
-        fragmentTansaction.addToBackStack(null)
-        fragmentTansaction.commit()
-    }
+
 
 
     companion object {
@@ -127,5 +160,163 @@ class AddProductListingFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+
+    private var isImageChanged = false
+    private val launcherForImagePicker =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val uri = data?.data
+                    if (uri != null) {
+                        profileImgUri = uri
+                        binding.imgSellProduct.setImageURI(data.data)
+                        isImageChanged = true
+                    }
+                }
+
+                com.github.dhaval2404.imagepicker.ImagePicker.RESULT_ERROR -> {
+                    toast(com.github.dhaval2404.imagepicker.ImagePicker.getError(data))
+                }
+
+                else -> {
+                    toast("Task Cancelled")
+                }
+            }
+        }
+
+    private fun setUpImagePicker() {
+        com.github.dhaval2404.imagepicker.ImagePicker.with(this)
+            .crop()
+            .compress(500)
+            .createIntent {
+                launcherForImagePicker.launch(it)
+            }
+    }
+
+    fun setOnClickListener() {
+        binding.btnSell.setOnClickListener {
+            if (validateForm()) {
+                hideKeyboard(it)
+                createUserAccount()
+            }
+        }
+        binding.addProductImage.setOnClickListener {
+            setUpImagePicker()
+        }
+
+    }
+
+
+    private fun validateForm(): Boolean {
+
+        val productTitle = binding.txtSellProductName
+        val productSubTitle = binding.txtProductSubType
+        val productQuality = binding.productQuality
+        val UserLocation = binding.txtSellLocation
+        val pricePerUnit = binding.txtSellPrice
+        val productQuantity = binding.txtSellQuantity
+        val productTotalUnits = binding.txtSellUnit
+        val productDiscription = binding.txtSellDescription
+        val productStatus = binding.txtSellStatus
+        val productSeasonStartDate = binding.seasonStart
+        val productseasonEndDate = binding.seasonEnd
+
+        productTitle.error = null
+        productSubTitle.error = null
+        productQuality.error = null
+        UserLocation.error = null
+        pricePerUnit.error = null
+        productQuantity.error = null
+        productTotalUnits.error = null
+        productDiscription.error = null
+        productStatus.error = null
+        productSeasonStartDate.error=null
+        productseasonEndDate.error=null
+
+        return when {
+            productTitle.ifEmpty("Product name is Required") -> false
+            productSubTitle.ifEmpty("Product SubType  is required") -> false
+            productQuality.ifEmpty("product Quality Required") -> false
+            UserLocation.ifEmpty("Your Address is Required") -> false
+            pricePerUnit.ifEmpty("PricePerUnit is required") -> false
+            productQuantity.ifEmpty("Enter product Quantity Such as 40KG, 50KG, etc.") -> false
+            productTotalUnits.ifEmpty("Type the Total number of available Units/items") -> false
+            productDiscription.ifEmpty("Product Discription is required") -> false
+            productSeasonStartDate.ifEmpty("Select product selling season starting date") -> false
+            productseasonEndDate.ifEmpty("Select product selling season ending date") -> false
+            productStatus.ifEmpty("Type your product Status Such as Available, OutOfStack,etc.") -> false
+
+            else -> {
+                true
+            }
+        }
+    }
+
+    private fun createUserAccount() {
+        val productTitle = binding.txtSellProductName.text.toString()
+        val productSubTitle = binding.txtProductSubType.text.toString()
+        val productQuality = binding.productQuality.text.toString()
+        val UserLocation = binding.txtSellLocation.text.toString()
+        val pricePerUnit = binding.txtSellPrice.text.toString()
+        val productQuantity = binding.txtSellQuantity.text.toString()
+        val productTotalUnits = binding.txtSellUnit.text.toString()
+        val productDiscription = binding.txtSellDescription.text.toString()
+        val productStatus = binding.txtSellStatus.text.toString()
+       // val productSeason = seasonIsSet
+        val productSeasonStartDate = binding.seasonStart.text.toString()
+        val productseasonEndDate = binding.seasonEnd.text.toString()
+        val user_id = auth.currentUser?.uid!!
+
+
+        val product = ProductModel(
+            profileImgUri.toString(),
+            productTitle,
+            productSubTitle,
+            productQuality,
+            UserLocation,
+            pricePerUnit,
+            productQuantity,
+            productTotalUnits,
+            productDiscription,
+            productStatus,
+            productSeasonStartDate,
+            productseasonEndDate,
+            user_id
+        )
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            vmProfile.addProduct(product)
+        }
+    }
+
+
+    private fun setUpObserver() {
+        vmProfile.addProductStatus.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    findNavController().popBackStack()
+                }
+
+                is DataState.Error -> {
+                    toast(it.errorMessage)
+                    ProgressDialogUtil.dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    ProgressDialogUtil.showProgressDialog(childFragmentManager)
+                }
+
+            }
+        }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -46,6 +47,7 @@
 
 
                 <TextView
+                    android:id="@+id/AvailableStatus"
                     android:maxHeight="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,6 +62,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/onItmeClickLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="110dp"
                 android:layout_gravity="center_vertical"
@@ -137,7 +140,8 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:background="@color/pink"
+                    android:background="@drawable/circular_background_drawable"
+                    android:backgroundTint="@color/pink"
                     android:id="@+id/add_to_cart"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -146,18 +150,17 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="4dp" />
-                <ImageButton
-                    android:background="@color/red"
-                    android:id="@+id/goto_inbox"
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/deleteProductFromCart"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_toStartOf="@+id/add_to_cart"
-                    android:src="@drawable/ic_baseline_delete_icon_24"/>
-
-
+                    android:background="@color/white"
+                    android:src="@drawable/icon_red_x" />
 
 
             </RelativeLayout>

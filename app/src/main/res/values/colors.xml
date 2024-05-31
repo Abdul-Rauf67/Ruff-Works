@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="green">#5BCD5F</color>
     <color name="pink">#C55ED6</color>
     <color name="colorPrimary">#2D383F</color>
@@ -10,8 +9,9 @@
     <color name="red">#C15076</color>
     <color name="colorPrimaryDark">#3F51B5</color>
     <color name="colorAccent">#81123727</color>
-    <color name="teal_200">#FF03DAC5</color>
     <color name="background">#FF6C02</color>
+    <color name="primary_color">#ED694A</color>
+    <color name="colorTransparent">#0000ffff</color>
 
     <color name="purple">#FF673AB7</color>
     <color name="blue">#0099ff</color>
@@ -22,13 +22,63 @@
     <color name="colorError">#fc0202</color>
 
 
-    <color name="purple_200">#72E83B</color>
-    <color name="purple_500">#7DEA4A</color>
-    <color name="purple_700">#65B540</color>
+
     <color name="main_color">#2A6110</color>
     <color name="input_text_color">#645C5C</color>
     <color name="secondary_bg_color">#B9D9AD</color>
     <color name="main_bg_color_2">#B9D9AD</color>
     <color name="cancel">#F32727</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_primary">#1C92FF</color>
+
+    <color name="color_splash_screen">#FFFFFFFF</color>
+    <color name="edittext_bg_color">#F1F1F1</color>
+    <color name="tvColor">@color/black</color>
+    <color name="backgroundColor">@color/white</color>
+    <color name="logoBgColor">@color/black</color>
+    <color name="trackBgColor">#FDE7DE</color>
+    <color name="dialogBgColor">@color/white</color>
+    <color name="messageItemColor">#EDEDED</color>
+    <color name="backgroundColor2">#F2F2F2</color>
+
+    //status bar
+    <color name="color_status_bar">@color/white</color>
+    <color name="chat_item_left_color">#FEDBD2</color>
+    <color name="chat_item_right_color">#FDEBE7</color>
+
+    //Text view and edit text
+    <color name="color_textview">@color/black</color>
+    <color name="color_edittext_background">#F4F5F7</color>
+    <color name="color_text_primary">#1C92FF</color>
+
+    //Backgrounds
+    <color name="color_background">#FAFAFD</color>
+    <color name="color_service_card">#EAE3E3</color>
+    <color name="color_bottom_nav">#DDEAE3E3</color>
+
+    //icons
+    <color name="color_icon">@color/black</color>
+    <color name="color_icon_profile_image_placeholder">#F5F5F8</color>
+
+    //Chat voice player
+    <color name="color_voice_player_seekbar">@color/black</color>
+    <color name="color_voice_player_background">#331C92FF</color>
+    <color name="color_voice_player_time_bg">#331C92FF</color>
+
+    //item chat image
+    <color name="color_chat_image_bg">#BE1C92FF</color>
+
+    //Item text chat
+    <color name="color_chat_text_bg">#1C92FF</color>
+
+    //Button
+    <color name="color_button_primary">#1C92FF</color>
 
 </resources>
