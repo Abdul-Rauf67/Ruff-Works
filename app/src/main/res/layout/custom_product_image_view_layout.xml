@@ -43,6 +43,7 @@
             android:text="Add To Cart" />
 
         <Button
+            android:id="@+id/chatBtnGo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_5sdp"

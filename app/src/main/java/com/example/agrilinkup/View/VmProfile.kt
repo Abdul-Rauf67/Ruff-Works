@@ -28,6 +28,7 @@ class VmProfile @Inject constructor(
     val AddToCortProducts=profileRepository.AddToCortProducts
     val fetchCartProducts=profileRepository.fetchCartProducts
     val AddUserToUserChatList=profileRepository.AddUserToUserChatList
+    val fetchUserFormUserChatList=profileRepository.fetchUserFormUserChatList
 
 
     fun updateUser(user: ModelUser) {
@@ -80,14 +81,14 @@ class VmProfile @Inject constructor(
             profileRepository.fetchProductsOfCart()
         }
     }
-    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel) {
+    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel,senderUser:ChatUserListDataModel) {
         viewModelScope.launch {
-            profileRepository.addUserToUserChatList(chatUserListDataModel)
+            profileRepository.addUserToUserChatList(chatUserListDataModel,senderUser)
         }
     }
-//    fun fetchUserFormUserChatList() {
-//        viewModelScope.launch {
-//            profileRepository.fetchUserFormUserChatList()
-//        }
-//    }
+    fun fetchUserFormUserChatList() {
+        viewModelScope.launch {
+            profileRepository.fetchUserFormUserChatList()
+        }
+    }
 }

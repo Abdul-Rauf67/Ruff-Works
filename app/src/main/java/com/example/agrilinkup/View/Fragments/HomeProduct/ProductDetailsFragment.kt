@@ -10,10 +10,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.agrilinkup.ModelUser
 import com.example.agrilinkup.Models.Entities.CartModel
 import com.example.agrilinkup.Models.Entities.ProductModel
 import com.example.agrilinkup.Models.Entities.ProductSharedPreferance
+import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.Models.PreferenceManager
+import com.example.agrilinkup.R
 import com.example.agrilinkup.View.VmProfile
 import com.example.agrilinkup.databinding.FragmentProductDetailsBinding
 import com.example.agrilinkup.ui.ProfileRepository
@@ -92,6 +95,10 @@ class ProductDetailsFragment : Fragment() {
             binding.AvailableItemsOrUnits.text = product.productTotalUnits
             binding.discription.text = product.productDiscription
             binding.status.text = product.productStatus
+
+            binding.BtnGoingToChat.setOnClickListener{
+                addChatUserAtUserChatList(product)
+            }
 
             if (product.tempValue.equals("CartFragment")){
                 goToCartOperations()
@@ -179,6 +186,80 @@ class ProductDetailsFragment : Fragment() {
                 }
             }
     }
+
+
+
+    private fun addChatUserAtUserChatList(product: ProductModel){
+        db.collection("users").document(product.user_ID)
+            .get().addOnSuccessListener { documentSnapshot ->
+                val user = documentSnapshot.toObject(ModelUser::class.java)
+                if (user != null) {
+                    val docId = documentSnapshot.id
+                    user.docId = docId
+                    addItemChat(product,user)
+                }
+            }.addOnFailureListener {
+                Toast.makeText(context,it.message!!,Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun addItemChat(product: ProductModel,user: ModelUser){
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
+        val context=context
+
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, requireContext())
+        vmProfile = VmProfile(profileRepo)
+        val UserData= ChatUserListDataModel(
+            user.fullName,
+            user.profileImageUri,
+            product.user_ID,
+            product.docId
+        )
+        val CurrentUser = prefs.getUserData()
+        val senderUserData = ChatUserListDataModel(
+            CurrentUser?.fullName!!,
+            CurrentUser.profileImageUri,
+            CurrentUser.docId,
+            product.docId
+        )
+
+        vmProfile.addUserToUserChatList(UserData,senderUserData)
+        userAddObserver()
+        val bundle = Bundle()
+        bundle.apply {
+            putString("userName",user.fullName)
+            putString("receiverUid",product.user_ID)
+            putString("profileImageLink",user.profileImageUri)
+        }
+        findNavController().navigate(R.id.action_productDetailsFragment_to_messagesChatFragment,bundle)
+    }
+
+    private fun userAddObserver() {
+        vmProfile.AddUserToUserChatList.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    //Toast.makeText(context,"User added to chatList",Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
+                }
+
+                is DataState.Error -> {
+                    //Toast.makeText(context,it.errorMessage,Toast.LENGTH_SHORT).show()
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    //showProgressDialog()
+                }
+
+            }
+        }
+    }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.unbind()

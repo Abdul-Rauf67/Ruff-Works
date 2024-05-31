@@ -8,62 +8,126 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.agrilinkup.CartFragment
+import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.R
+import com.example.agrilinkup.View.Adapters.AdapterAtCartRecyclerView
+import com.example.agrilinkup.View.Fragments.MainFragment
+import com.example.agrilinkup.View.VmProfile
+import com.example.agrilinkup.databinding.FragmentCartBinding
 //import com.example.agrilinkup.Utils.utils.VisibilityUtils.show
 //import com.example.agrilinkup.Utils.utils.gone
 import com.example.agrilinkup.databinding.FragmentMessagesUsersBinding
+import com.example.agrilinkup.ui.ProfileRepository
+import com.example.agrilinkup.utils.DataState
+import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
+import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
+import com.example.agrilinkup.utils.toast
 import com.example.flame.ui.fragments.messages.adapters.MessagesUserListAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 
 class MessagesUserListFragment : Fragment() {
     private lateinit var binding: FragmentMessagesUsersBinding
-    private lateinit var vm : MessagesUserListVm
-    private lateinit var messagesUserListAdapter: MessagesUserListAdapter
+    private lateinit var vmProfile: VmProfile
+    private lateinit var preferenceManager: PreferenceManager
+
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
+        binding = FragmentMessagesUsersBinding.inflate(inflater, container, false)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_messages_users, container, false)
-        vm = ViewModelProvider(this)[MessagesUserListVm::class.java]
-        inIt()
+        val prefs= PreferenceManager(requireContext())
+        val auth= FirebaseAuth.getInstance()
+        val db= FirebaseFirestore.getInstance()
+        val storage= FirebaseStorage.getInstance().getReference()
+        val context=requireContext()
+        preferenceManager=prefs
+
+        val profileRepo= ProfileRepository(db, auth, prefs, storage, context)
+        vmProfile = VmProfile(profileRepo)
+        vmProfile.fetchUserFormUserChatList()
+
+        binding.refreshCartItems.setOnRefreshListener {
+            binding.refreshCartItems.isRefreshing=false
+            vmProfile.fetchUserFormUserChatList()
+            setUpObserver1()
+        }
+        setUpObserver()
+
         return binding.root
     }
 
-    private fun inIt() {
-        setOnClickListener()
-        populateData()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+    fun refetchProduct(){
+        vmProfile.fetchUserFormUserChatList()
+        setUpObserver1()
     }
 
-    private fun populateData() {
-        userObserver()
-    }
 
-    private fun userObserver(){
-        binding.shimmerLayout.startShimmer()
-        vm.usersList().observe(requireActivity()) { usersList ->
-            messagesUserListAdapter = MessagesUserListAdapter(usersList){ userName,userId,profileImageLink->
-                val bundle = Bundle()
-                bundle.apply {
-                    putString("userName",userName)
-                    putString("receiverUid",userId)
-                    putString("profileImageLink",profileImageLink)
+
+
+    private fun setUpObserver() {
+        vmProfile.fetchUserFormUserChatList.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    val UsersList = it.data
+                    //  toast("productList Empty")
+                    if (!UsersList.isNullOrEmpty()) {
+                        val navigator=findNavController()
+                        binding.shimmerLayout.visibility=View.INVISIBLE
+                        binding.refreshCartItems.visibility=View.VISIBLE
+                        binding.recyclerView.adapter =
+                            MessagesUserListAdapter(UsersList,requireContext(),navigator)
+                    }
+                    dismissProgressDialog()
                 }
-                findNavController().navigate(R.id.action_mainFragment2_to_messagesChatFragment,bundle)
-            }
-            binding.recyclerView.apply {
-                adapter = messagesUserListAdapter
-                binding.shimmerLayout.stopShimmer()
-              //  binding.shimmerLayout.gone()
-              //  this.show()
+
+                is DataState.Error -> {
+                    toast(it.errorMessage)
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    showProgressDialog()
+                }
             }
         }
     }
 
-    private fun setOnClickListener() {
+    private fun setUpObserver1() {
+        vmProfile.fetchUserFormUserChatList.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    dismissProgressDialog()
+                    val UsersList = it.data
+                    //  toast("productList Empty")
+                    if (!UsersList.isNullOrEmpty()) {
+                        val navigator=findNavController()
+                        binding.recyclerView.adapter =
+                            MessagesUserListAdapter(UsersList,requireContext(),navigator)
+                    }
+                    //dismissProgressDialog()
+                }
 
+                is DataState.Error -> {
+                    toast(it.errorMessage)
+                    dismissProgressDialog()
+                }
+
+                is DataState.Loading -> {
+                    // showProgressDialog()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

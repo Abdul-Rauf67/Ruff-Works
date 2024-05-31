@@ -1,6 +1,7 @@
 package com.example.agrilinkup.View.Adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import javax.inject.Inject
 
 class AdapterProductsListings(private val items: List<ProductModel>,
                               val context: Context,
@@ -42,6 +44,9 @@ class AdapterProductsListings(private val items: List<ProductModel>,
                               val  fragmentManager12: FragmentManager) :
     RecyclerView.Adapter<AdapterProductsListings.ViewHolder>() {
 
+    @Inject
+    lateinit var preferenceManager: ProductSharedPreferance
+    lateinit var prefs:PreferenceManager
     private lateinit var vmProfile: VmProfile
     val db = Firebase.firestore
     val auth = Firebase.auth
@@ -89,6 +94,11 @@ class AdapterProductsListings(private val items: List<ProductModel>,
                 val btnCart=view.findViewById<Button>(R.id.button2)
                 btnCart.setOnClickListener{
                     addToCart(product)
+                }
+                val chatBtn=view.findViewById<Button>(R.id.chatBtnGo)
+                chatBtn.setOnClickListener{
+                    addChatUserAtUserChatList(product)
+                    builder.dismiss()
                 }
                 builder.setView(view)
                 builder.setCanceledOnTouchOutside(true)
@@ -140,20 +150,35 @@ class AdapterProductsListings(private val items: List<ProductModel>,
                 product.user_ID,
                 product.docId
             )
-            vmProfile.addUserToUserChatList(UserData)
+            val CurrentUser = prefs.getUserData()
+            val senderUserData = ChatUserListDataModel(
+                CurrentUser?.fullName!!,
+                CurrentUser.profileImageUri,
+                CurrentUser.docId,
+                product.docId
+            )
+
+            vmProfile.addUserToUserChatList(UserData,senderUserData)
             userAddObserver()
+            val bundle = Bundle()
+            bundle.apply {
+                putString("userName",user.fullName)
+                putString("receiverUid",product.user_ID)
+                putString("profileImageLink",user.profileImageUri)
+            }
+            navigator.navigate(R.id.action_mainFragment2_to_messagesChatFragment,bundle)
         }
 
         private fun userAddObserver() {
             vmProfile.AddUserToUserChatList.observe(lifecycleOwner12) {
                 when (it) {
                     is DataState.Success -> {
-                        Toast.makeText(context,"User added to chatList",Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context,"User added to chatList",Toast.LENGTH_SHORT).show()
                         dismissProgressDialog()
                     }
 
                     is DataState.Error -> {
-                        Toast.makeText(context,it.errorMessage,Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context,it.errorMessage,Toast.LENGTH_SHORT).show()
                         dismissProgressDialog()
                     }
 

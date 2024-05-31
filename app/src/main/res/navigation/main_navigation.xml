@@ -75,7 +75,11 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.example.agrilinkup.View.Fragments.HomeProduct.ProductDetailsFragment"
         android:label="fragment_product_details"
-        tools:layout="@layout/fragment_product_details" />
+        tools:layout="@layout/fragment_product_details" >
+        <action
+            android:id="@+id/action_productDetailsFragment_to_messagesChatFragment"
+            app:destination="@id/messagesChatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/messagesChatFragment"
         android:name="com.example.flame.ui.fragments.messages.chat.MessagesChatFragment"

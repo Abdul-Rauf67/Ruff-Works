@@ -68,8 +68,8 @@ class ProfileRepository @Inject constructor(
     private val _AddUserToUserChatList = MutableLiveData<DataState<Nothing>>()
     val AddUserToUserChatList: LiveData<DataState<Nothing>> = _AddUserToUserChatList
 
-    private val _fetchUserToUserChatList = MutableLiveData<DataState<List<ProductModel>>>()
-    val fetchUserToUserChatList: LiveData<DataState<List<ProductModel>>> = _fetchUserToUserChatList
+    private val _fetchUserFormUserChatList = MutableLiveData<DataState<List<ChatUserListDataModel>>>()
+    val fetchUserFormUserChatList: LiveData<DataState<List<ChatUserListDataModel>>> = _fetchUserFormUserChatList
 
     lateinit var userName: String
 
@@ -291,7 +291,7 @@ class ProfileRepository @Inject constructor(
                                     product.user_ID = userId
                                     product.productSellerName = userName
                                     product.productImageName =
-                                        getImageNameFromUri(product.productImgeUri.toUri())
+                                    getImageNameFromUri(product.productImgeUri.toUri())
                                     productsList.add(product)
                                 }
                             }
@@ -507,17 +507,47 @@ class ProfileRepository @Inject constructor(
     }
 
 
-    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel) {
+    fun addUserToUserChatList(chatUserListDataModel: ChatUserListDataModel,senderUser:ChatUserListDataModel) {
         _AddUserToUserChatList.value = DataState.Loading
         val userChatListRef = db.collection("Users_At_Chat").document(uid).collection("User").document(chatUserListDataModel.UserUid)
         userChatListRef.set(chatUserListDataModel)
             .addOnSuccessListener {
-                _AddUserToUserChatList.value = DataState.Success()
+                db.collection("Users_At_Chat").document(chatUserListDataModel.UserUid).collection("User").document(uid)
+                    .set(senderUser)
+                    .addOnSuccessListener{
+                        _AddUserToUserChatList.value = DataState.Success()
+                    }
+                    .addOnFailureListener { exception ->
+                        _AddUserToUserChatList.value = DataState.Error(exception.message!!)
+                    }
             }
             .addOnFailureListener { exception ->
                 _AddUserToUserChatList.value = DataState.Error(exception.message!!)
             }
     }
+
+
+    fun fetchUserFormUserChatList() {
+        _fetchUserFormUserChatList.value = DataState.Loading
+        db.collection("Users_At_Chat").document(uid).collection("User")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchUserFormUserChatList.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+                val UsersList = mutableListOf<ChatUserListDataModel>()
+                for (data in value?.documents!!) {
+                    val User = data.toObject(ChatUserListDataModel::class.java)
+                    if (User != null) {
+                        UsersList.add(User)
+                    }
+                }
+                _fetchUserFormUserChatList.value = DataState.Success(UsersList)
+            }
+    }
+
+
+
 
 
 

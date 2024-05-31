@@ -140,7 +140,8 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:background="@color/pink"
+                    android:background="@drawable/circular_background_drawable"
+                    android:backgroundTint="@color/pink"
                     android:id="@+id/add_to_cart"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

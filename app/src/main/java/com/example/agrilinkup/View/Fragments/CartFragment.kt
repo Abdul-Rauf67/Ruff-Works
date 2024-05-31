@@ -123,7 +123,8 @@ class CartFragment : Fragment() {
                     if (!productsList.isNullOrEmpty()) {
                         val navigator=findNavController()
                         binding.cartRecyclerView.adapter =
-                            AdapterAtCartRecyclerView(productsList,requireContext(),navigator)
+                            AdapterAtCartRecyclerView(productsList,requireContext(),
+                                navigator,viewLifecycleOwner,childFragmentManager)
                     }
                     dismissProgressDialog()
                 }
@@ -150,7 +151,8 @@ class CartFragment : Fragment() {
                     if (!productsList.isNullOrEmpty()) {
                         val navigator=findNavController()
                         binding.cartRecyclerView.adapter =
-                            AdapterAtCartRecyclerView(productsList,requireContext(),navigator)
+                            AdapterAtCartRecyclerView(productsList,requireContext(),
+                                navigator,viewLifecycleOwner,childFragmentManager)
                     }
                     //dismissProgressDialog()
                 }

@@ -9,13 +9,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.agrilinkup.Models.Entities.messages.MessagesChatDataModel
+import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.DateTimeUtils
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
@@ -25,7 +29,7 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
     val showProgressDialog = MutableLiveData<Boolean>()
     private val messageList = ArrayList<MessagesChatDataModel>()
     private val auth = Firebase.auth
-    private val database = Firebase.database.reference
+    private val database = FirebaseFirestore.getInstance()
     private var storageRef = Firebase.storage.reference
     private var senderUid = auth.currentUser?.uid
     private var receiverUid: String? = null
@@ -44,10 +48,11 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
 
     fun sendSms(sms: String) {
         val message = MessagesChatDataModel(senderUid, "text", sms)
-        database.child("chats").child(senderRoom).child("messages").push().setValue(message)
+        database.collection("chats").document(senderRoom). collection("messages").document()
+            .set(message)
             .addOnSuccessListener {
-                database.child("chats").child(receiverRoom).child("messages").push()
-                    .setValue(message)
+                database.collection("chats").document(receiverRoom).collection("messages").document()
+                    .set(message)
             }
     }
 
@@ -63,9 +68,13 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
                 imageRef.downloadUrl.addOnSuccessListener { imgLink ->
                     message.smsContent = imgLink.toString()
                     message.demoSmsContent = null
-                    database.child("chats").child(senderRoom).child("messages").push().setValue(message)
+                    database.collection("chats").document(senderRoom).
+                    collection("messages").
+                    document().set(message)
                         .addOnSuccessListener {
-                            database.child("chats").child(receiverRoom).child("messages").push().setValue(message)
+                            database.collection("chats").document(receiverRoom)
+                                .collection("messages")
+                                .document().set(message)
                         }
                 }
             }
@@ -98,9 +107,13 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener {
                 videoRef.downloadUrl.addOnSuccessListener { videoLink ->
                     message.smsContent = videoLink.toString()
-                    database.child("chats").child(senderRoom).child("messages").push().setValue(message)
+                    database.collection("chats").document(senderRoom)
+                        .collection("messages")
+                        .document().set(message)
                         .addOnSuccessListener {
-                            database.child("chats").child(receiverRoom).child("messages").push().setValue(message)
+                            database.collection("chats").document(receiverRoom)
+                                .collection("messages")
+                                .document().set(message)
                         }
                     showProgressDialog.value = false
                 }
@@ -123,18 +136,21 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
     }
 
     private fun retrieveMessages(chatRoomId: String) {
-        database.child("chats").child(chatRoomId).child("messages").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    messageList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val message = postSnapshot.getValue(MessagesChatDataModel::class.java)
-                        message?.let { messageList.add(it) }
-                    }
-                    chatListMutableLiveData.value = messageList
+        database.collection("chats")
+            .document(chatRoomId).collection("messages")
+            .orderBy("timestamp")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                   // _fetchProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
                 }
-                override fun onCancelled(error: DatabaseError) {
+                messageList.clear()
+                for (document in value?.documents!!) {
+                    val message = document.toObject(MessagesChatDataModel::class.java)
+                    message?.let { messageList.add(it) }
                 }
-            })
+                chatListMutableLiveData.value = messageList
+            }
     }
 
     fun sendAudio(audioUri: Uri) {
@@ -152,9 +168,9 @@ class MessagesChatVm(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener {
                 audioRef.downloadUrl.addOnSuccessListener { audioUri ->
                     message.smsContent = audioUri.toString()
-                    database.child("chats").child(senderRoom).child("messages").push().setValue(message)
+                    database.collection("chats").document(senderRoom).collection("messages").document().set(message)
                         .addOnSuccessListener {
-                            database.child("chats").child(receiverRoom).child("messages").push().setValue(message)
+                            database.collection("chats").document(receiverRoom).collection("messages").document().set(message)
                         }
                     showProgressDialog.value = false
                 }

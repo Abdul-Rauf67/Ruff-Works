@@ -47,7 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="Alia"
+                android:textColor="@color/black"
+                android:text="Content Name"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/userProfileImg"
                 app:layout_constraintTop_toTopOf="@+id/userProfileImg" />
@@ -101,6 +102,7 @@
             android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxHeight="@dimen/_100sdp"
             android:background="@color/white"
             android:paddingHorizontal="@dimen/_25sdp"
             android:paddingTop="@dimen/_10sdp"
@@ -112,7 +114,9 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/messageEditText"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/_85sdp"
+                android:minHeight="@dimen/_35sdp"
                 android:layout_marginEnd="15dp"
                 android:background="@color/colorTransparent"
                 android:hint="Type something..."
@@ -136,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="322dp" />
+                app:layout_constraintGuide_begin="276dp" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/SendButton"
@@ -168,7 +172,8 @@
             <com.devlomi.record_view.RecordView
                 android:id="@+id/record_view"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_35sdp"
                 android:layout_marginEnd="20dp"
                 app:counter_time_color="@color/primary_color"
                 app:layout_constraintBottom_toBottomOf="parent"
