@@ -64,10 +64,37 @@ class VmProfile @Inject constructor(
             profileRepository.fetchProducts()
         }
     }
+    fun fetchProducts(category:String) {
+        viewModelScope.launch {
+            profileRepository.fetchProducts(category)
+        }
+    }
+    fun fetchProducts(category:String,orderOfPrice:String) {
+        viewModelScope.launch {
+            profileRepository.fetchProducts(category,orderOfPrice)
+        }
+    }
+    fun fetchProducts1(orderOfPrice:String) {
+        viewModelScope.launch {
+            profileRepository.fetchProducts1(orderOfPrice)
+        }
+    }
 
     fun fetchProductsListings(currentUserUid: String){
         viewModelScope.launch {
             profileRepository.fetchProductListings(currentUserUid)
+        }
+    }fun fetchProductsListings1(currentUserUid: String,orderOfPrice:String){
+        viewModelScope.launch {
+            profileRepository.fetchProductListings1(currentUserUid,orderOfPrice)
+        }
+    }fun fetchProductsListings(currentUserUid: String,category: String){
+        viewModelScope.launch {
+            profileRepository.fetchProductListings(currentUserUid,category)
+        }
+    }fun fetchProductsListings(currentUserUid: String,category:String,orderOfPrice:String){
+        viewModelScope.launch {
+            profileRepository.fetchProductListings(currentUserUid,category,orderOfPrice)
         }
     }
 

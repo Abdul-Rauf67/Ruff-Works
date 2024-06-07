@@ -97,7 +97,7 @@ class MessagesUserListFragment : Fragment() {
                 }
 
                 is DataState.Loading -> {
-                    showProgressDialog()
+                    //showProgressDialog()
                 }
             }
         }

@@ -37,7 +37,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
-class AdapterProductsListings(private val items: List<ProductModel>,
+class AdapterProductsListings(private var items: List<ProductModel>,
                               val context: Context,
                               val navigator: NavController,
                               val lifecycleOwner12: LifecycleOwner,
@@ -65,6 +65,13 @@ class AdapterProductsListings(private val items: List<ProductModel>,
 
         holder.bind(data)
     }
+    fun updateList(newList: List<ProductModel>) {
+        items = newList
+        notifyDataSetChanged()
+    }
+
+
+
 
     inner class ViewHolder(val binding: ProductListingItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {

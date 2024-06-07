@@ -103,6 +103,34 @@
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                    <Spinner
+                        android:layout_gravity="center|center_vertical"
+                        android:imeActionId="6"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:paddingStart="8dp"
+                        android:text="FilterProducts"
+                        android:id="@+id/productCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/btn_dropdown"
+                        android:spinnerMode="dropdown"
+                        />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

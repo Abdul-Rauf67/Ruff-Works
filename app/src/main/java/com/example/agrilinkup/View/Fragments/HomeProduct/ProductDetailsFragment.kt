@@ -1,13 +1,16 @@
 package com.example.agrilinkup.View.Fragments.HomeProduct
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.agrilinkup.ModelUser
@@ -50,6 +53,7 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var vmProfile: VmProfile
     val db = Firebase.firestore
     val auth = Firebase.auth
+    val storage= FirebaseStorage.getInstance().getReference()
     lateinit var preferenceManager: ProductSharedPreferance
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,13 +106,22 @@ class ProductDetailsFragment : Fragment() {
 
             if (product.tempValue.equals("CartFragment")){
                 goToCartOperations()
-            }else{
+            }else if (product.tempValue.equals("MyProductsFragment")){
+                goToMyProductOperations()
+            }
+            else{
                 goToProductListingOperations()
             }
 
         }
     }
 
+    private fun goToMyProductOperations(){
+        binding.BtnGoingToChat.text="Delete Product"
+        binding.button2.text="Update Product"
+        deleteProduct(product)
+        updateProduct(product)
+    }
 
     private fun goToCartOperations(){
         binding.button2.text="Delete From Cart"
@@ -125,6 +138,47 @@ class ProductDetailsFragment : Fragment() {
     private fun goToProductListingOperations(){
         binding.button2.setOnClickListener{
             addToCart()
+        }
+    }
+    private fun deleteProduct(product: ProductModel) {
+
+        val imageUri=product.productImgeUri.toUri()
+        val imageName=getImageNameFromUri(imageUri)
+        deleteProductImage(imageName)
+
+        binding.BtnGoingToChat.setOnClickListener {
+            db.collection("users_products")
+                .document(auth.uid!!)
+                .collection("products")
+                .document(product.docId)
+                .delete()
+        }
+    }
+    private fun getImageNameFromUri(uri: Uri): String {
+        val path = uri.path
+        return path?.substring(path.lastIndexOf('/') + 1) ?: ""
+    }
+
+    private fun deleteProductImage(imageName: String) {
+        // Get reference to the old profile image
+        val oldProfileImageRef = storage.child("Product_images").child(imageName)
+
+        // Delete the old profile image
+        oldProfileImageRef.delete()
+            .addOnSuccessListener {
+                // Handle successful deletion
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors
+                Log.e("Exception", "Error deleting old profile image: $exception")
+            }
+    }
+
+    private fun updateProduct(product: ProductModel){
+        binding.button2.setOnClickListener{
+            val preferenceManager=ProductSharedPreferance(requireContext())
+            preferenceManager.saveTempProduct(product)
+            findNavController().navigate(R.id.action_productDetailsFragment_to_updateMyProductFragment)
         }
     }
     private fun addToCart(){
