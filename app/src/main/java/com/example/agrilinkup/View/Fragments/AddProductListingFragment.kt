@@ -62,8 +62,9 @@ class AddProductListingFragment : Fragment() {
     @Inject
     lateinit var preferenceManager: PreferenceManager
     private lateinit var auth: FirebaseAuth
-
+    lateinit var productCategoryType:String
     private lateinit var vmProfile: VmProfile
+    var notSelectedproductCategory=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +93,7 @@ class AddProductListingFragment : Fragment() {
         preferenceManager = PreferenceManager(requireContext())
 
         inIt()
+
         return binding.root
 
     }
@@ -104,6 +106,41 @@ class AddProductListingFragment : Fragment() {
 
     private fun inIt1() {
 
+        val inputProductcategories = arrayOf(
+            "Select Product Category",
+            "Grains - اناج" to "Anaj",
+            "Fruits - پھل" to "Phal",
+            "Vegetables - سبزیاں" to "Sabziyan",
+            "Legumes - دالیں " to "Daloon",
+            "Nuts and seeds - نٹس اور بیج" to "Nuts aur Beejon",
+            "Dairy products - دودھ کے پروڈکٹس" to "Doodh ke Products",
+            "Meat and poultry - گوشت اور پولیٹری" to "Gosht aur Poultry",
+            "Eggs - انڈے" to "Anday",
+            "Fiber crops - فائبر کپاس" to "Fiber Kapas",
+            "Spices and herbs - مصالحے اور جڑی بوٹیاں" to "Masalay aur Jari Botiyan",
+            "Beverages - مشروبات" to "Mashrobat",
+            "Oils - تیل" to "Teel"
+        )
+        val saveProductCategories= arrayOf(
+            "NotSelect",
+            "Grains", "Fruits", "Vegetables",
+            "Legumes", "Nuts__Seeds", "Dairy_products",
+            "Meat__Poultry", "Eggs","Fiber_crops",
+            "Spices_herbs","Beverages","Oils"
+        )
+        if (binding.productCategory!=null) {
+            var adapter1= ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,inputProductcategories)
+            binding.productCategory.adapter = adapter1
+            1.also { binding.productCategory.id = it }
+            binding.productCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
+                    productCategoryType= saveProductCategories[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    notSelectedproductCategory=true
+                }
+            }
+        }
 
 
         binding.seasonStart.setOnClickListener(View.OnClickListener {
@@ -250,6 +287,18 @@ class AddProductListingFragment : Fragment() {
             productseasonEndDate.ifEmpty("Select product selling season ending date") -> false
             productStatus.ifEmpty("Type your product Status Such as Available, OutOfStack,etc.") -> false
 
+            notSelectedproductCategory -> {
+                toast("Please Select Product Category!")
+                false
+            }
+
+            productCategoryType.equals("NotSelect") ->{
+                toast("Please Select Product Category!")
+                false
+            }
+
+
+
             else -> {
                 true
             }
@@ -276,6 +325,7 @@ class AddProductListingFragment : Fragment() {
             profileImgUri.toString(),
             productTitle,
             productSubTitle,
+            productCategoryType,
             productQuality,
             UserLocation,
             pricePerUnit,

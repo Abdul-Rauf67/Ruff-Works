@@ -65,10 +65,10 @@
         android:id="@+id/image_circular"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:padding="8dp"
+        android:padding="17dp"
         android:background="@drawable/circular_background_drawable"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_action_send"
+        android:src="@drawable/chat_send_button_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

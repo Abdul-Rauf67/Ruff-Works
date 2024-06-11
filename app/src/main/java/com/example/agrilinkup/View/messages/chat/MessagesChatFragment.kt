@@ -8,6 +8,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -284,92 +287,31 @@ class MessagesChatFragment : Fragment() {
     }
 
 
-    //Handling audio recorder
-//    private fun handlingRecordButton(){
-//        binding.recordButton.apply {
-//            setRecordView(binding.recordView)
-//            setScaleUpTo(1.2f)
-//        }
-//        val chatEditText = binding.messageEditText
-//        val attach = binding.linkDataIcon
-//
-//        binding.recordView.apply {
-//            setSoundEnabled(false)
-//            setOnRecordListener(object : OnRecordListener {
-//                override fun onStart() {
-//                    chatEditText.gone()
-//                    attach.invisible()
-//                    if (areAllPermissionsGranted()){
-//                        startRecording()
-//                        Log.d("Record Audio","Being recorded")
-//                    }
-//                }
-//
-//                override fun onCancel() {
-//                    chatEditText.visible()
-//                    attach.visible()
-//                }
-//
-//                override fun onFinish(recordTime: Long, limitReached: Boolean) {
-//                    chatEditText.visible()
-//                    attach.visible()
-//                    stopAndSaveRecording()
-//                }
-//
-//                override fun onLessThanSecond() {
-//                    chatEditText.visible()
-//                    attach.visible()
-//                }
-//
-//                override fun onLock() {
-//                    TODO("Not yet implemented")
-//                }
-//            })
-//        }
-//    }
-//    private fun stopAndSaveRecording(){
-//        stopRecording()
-//        val audioFilePath = outPutFilePathForAudioRecord()
-//        if (isAudioFileExists(audioFilePath)) {
-//            val audioUri = getUriForRecordedAudio(audioFilePath)
-//            vm.sendAudio(audioUri)
-//            Log.e("Record Audio", "$audioUri")
-//        } else {
-//            Log.e("Record Audio", "Audio file does not exist")
-//        }
-//    }
-//    private fun startRecording() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            mediaRecorder = MediaRecorder(requireContext()).apply {
-//                setAudioSource(MediaRecorder.AudioSource.MIC)
-//                setOutputFormat(MediaRecorder.OutputFormat.DEFAULT)
-//                setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-//                setOutputFile(outPutFilePathForAudioRecord())
-//                prepare()
-//                start()
-//            }
-//        }
-//        Log.d("Record Audio","start Recording")
-//    }
-//    private fun stopRecording() {
-//        mediaRecorder?.apply {
-//            stop()
-//            release()
-//        }
-//        mediaRecorder = null
-//    }
-//    private fun isAudioFileExists(filePath: String): Boolean {
-//        val audioFile = File(filePath)
-//        return audioFile.exists() && audioFile.isFile
-//    }
-//    private fun outPutFilePathForAudioRecord(): String {
-//        return File( requireContext().filesDir, "recorded_audio.mp3").absolutePath
-//    }
-//    private fun getUriForRecordedAudio(filePath: String): Uri {
-//        val audioFile = File(filePath)
-//        return Uri.fromFile(audioFile)
-//    }
+    private fun areAllPermissionsGranted12(): Boolean {
+        val requiredPermissions = arrayOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        for (permission in requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+        return true
+    }
 
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            permissionRequestCode
+        )
+    }
 
 
 
@@ -385,67 +327,71 @@ class MessagesChatFragment : Fragment() {
             setSoundEnabled(false)
             setOnRecordListener(object : OnRecordListener {
                 override fun onStart() {
-                    chatEditText.gone()
-                    attach.invisible()
-                    if (areAllPermissionsGranted()) {
+                    chatEditText.visibility = View.GONE
+                    attach.visibility = View.INVISIBLE
+                    if (areAllPermissionsGranted12()) {
                         startRecording()
-                        Log.d("Record Audio", "Being recorded")
+                        Log.d("Record Audio", "Recording started")
+                    } else {
+                        requestPermissions()
                     }
                 }
 
                 override fun onCancel() {
-                    chatEditText.visible()
-                    attach.visible()
+                    chatEditText.visibility = View.VISIBLE
+                    attach.visibility = View.VISIBLE
                     stopRecording()
                 }
 
                 override fun onFinish(recordTime: Long, limitReached: Boolean) {
-                    chatEditText.visible()
-                    attach.visible()
+                    chatEditText.visibility = View.VISIBLE
+                    attach.visibility = View.VISIBLE
                     stopAndSaveRecording()
                 }
 
                 override fun onLessThanSecond() {
-                    chatEditText.visible()
-                    attach.visible()
+                    chatEditText.visibility = View.VISIBLE
+                    attach.visibility = View.VISIBLE
                     stopRecording()
                 }
 
                 override fun onLock() {
-                    // Handle lock recording if necessary
+                    // Optional: Handle lock recording if needed
                 }
             })
         }
     }
 
+    private fun startRecording() {
+        try {
+            val audioFilePath = outputFilePathForAudioRecord()
+            Log.d("Record Audio", "Output file path: $audioFilePath")
+
+            mediaRecorder = MediaRecorder().apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                setOutputFile(audioFilePath)
+                prepare()
+                start()
+            }
+            Log.d("Record Audio", "Recording started")
+        } catch (e: Exception) {
+            Log.e("Record Audio", "Failed to start recording", e)
+        }
+    }
+
     private fun stopAndSaveRecording() {
         stopRecording()
-        val audioFilePath = outPutFilePathForAudioRecord()
+        val audioFilePath = outputFilePathForAudioRecord()
         Log.d("Record Audio", "Audio file path: $audioFilePath")
         if (isAudioFileExists(audioFilePath)) {
             val audioUri = getUriForRecordedAudio(audioFilePath)
             vm.sendAudio(audioUri)
-            Log.e("Record Audio", "$audioUri")
+            // Send the audio URI to your ViewModel or use it as needed
+            Log.e("Record Audio", "Audio URI: $audioUri")
         } else {
             Log.e("Record Audio", "Audio file does not exist")
-        }
-    }
-
-    private fun startRecording() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                mediaRecorder = MediaRecorder(requireContext()).apply {
-                    setAudioSource(MediaRecorder.AudioSource.MIC)
-                    setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                    setOutputFile(outPutFilePathForAudioRecord())
-                    prepare()
-                    start()
-                }
-            }
-            Log.d("Record Audio", "Start Recording")
-        } catch (e: Exception) {
-            Log.e("Record Audio", "Failed to start recording", e)
         }
     }
 
@@ -456,6 +402,7 @@ class MessagesChatFragment : Fragment() {
                 release()
             }
             mediaRecorder = null
+            Log.d("Record Audio", "Recording stopped")
         } catch (e: Exception) {
             Log.e("Record Audio", "Failed to stop recording", e)
         }
@@ -468,14 +415,7 @@ class MessagesChatFragment : Fragment() {
         return exists
     }
 
-//    private fun outPutFilePathForAudioRecord(): String {
-//        val directory = requireContext().filesDir
-//        if (!directory.exists()) {
-//            directory.mkdirs()
-//        }
-//        return File(directory, "recorded_audio.mp3").absolutePath
-//    }
-    private fun outPutFilePathForAudioRecord(): String {
+    private fun outputFilePathForAudioRecord(): String {
         val directory = requireContext().filesDir
         if (!directory.exists()) {
             val created = directory.mkdirs()
@@ -484,16 +424,10 @@ class MessagesChatFragment : Fragment() {
         return File(directory, "recorded_audio.mp3").absolutePath
     }
 
-
     private fun getUriForRecordedAudio(filePath: String): Uri {
         val audioFile = File(filePath)
         return Uri.fromFile(audioFile)
     }
-
-
-
-
-
 
 
 

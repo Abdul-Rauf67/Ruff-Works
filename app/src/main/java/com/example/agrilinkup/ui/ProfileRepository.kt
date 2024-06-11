@@ -20,11 +20,14 @@ import com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query.Direction
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
+import java.sql.Date
+import java.sql.Timestamp
 import javax.inject.Inject
 
 class ProfileRepository @Inject constructor(
@@ -206,6 +209,97 @@ class ProfileRepository @Inject constructor(
     fun fetchProducts() {
         _fetchProducts.value = DataState.Loading
         db.collection("users_products").document(uid).collection("products")
+            .orderBy("timestamp" ,Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                for (data in value?.documents!!) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        val docId = data.id
+                        product.docId = docId
+                        product.productImageName =
+                            getImageNameFromUri(product.productImgeUri.toUri())
+                        productsList.add(product)
+                    }
+                }
+
+                _fetchProducts.value = DataState.Success(productsList)
+            }
+    }
+
+    fun fetchProducts(category:String) {
+        _fetchProducts.value = DataState.Loading
+        db.collection("users_products").document(uid).collection("products")
+            .whereEqualTo("inputproductCategory",category)
+            .orderBy("timestamp" ,Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                for (data in value?.documents!!) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        val docId = data.id
+                        product.docId = docId
+                        product.productImageName =
+                            getImageNameFromUri(product.productImgeUri.toUri())
+                        productsList.add(product)
+                    }
+                }
+
+                _fetchProducts.value = DataState.Success(productsList)
+            }
+    }
+
+    fun fetchProducts(category:String,orderOfPrice:String) {
+        var direction=Direction.DESCENDING
+        if (orderOfPrice.equals("asc")){
+            direction=Direction.ASCENDING
+        }
+        _fetchProducts.value = DataState.Loading
+        db.collection("users_products").document(uid).collection("products")
+            .whereEqualTo("inputproductCategory",category)
+            .orderBy("pricePerUnit",direction)
+            .orderBy("timestamp" ,Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProducts.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                for (data in value?.documents!!) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        val docId = data.id
+                        product.docId = docId
+                        product.productImageName =
+                            getImageNameFromUri(product.productImgeUri.toUri())
+                        productsList.add(product)
+                    }
+                }
+
+                _fetchProducts.value = DataState.Success(productsList)
+            }
+    }
+
+    fun fetchProducts1(orderOfPrice:String) {
+        var direction=Direction.DESCENDING
+        if (orderOfPrice.equals("asc")){
+            direction=Direction.ASCENDING
+        }
+        _fetchProducts.value = DataState.Loading
+        db.collection("users_products").document(uid).collection("products")
+            .orderBy("pricePerUnit",direction)
+            .orderBy("timestamp" ,Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     _fetchProducts.value = DataState.Error(error.message!!)
@@ -252,9 +346,15 @@ class ProfileRepository @Inject constructor(
 //            }
 //    }
 
-    fun fetchProductListings(currentUserUid: String) {
+    fun fetchProductListings1(currentUserUid: String,orderOfPrice:String) {
+        var direction=Direction.DESCENDING
+        if (orderOfPrice.equals("asc")){
+            direction=Direction.ASCENDING
+        }
         _fetchProductsListings.value = DataState.Loading
         db.collectionGroup("products")
+            .orderBy("pricePerUnit",direction)
+            .orderBy("timestamp", Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     _fetchProductsListings.value = DataState.Error(error.message!!)
@@ -298,7 +398,6 @@ class ProfileRepository @Inject constructor(
                         }
                     }
                 }
-
                 // Wait for all tasks to complete
                 Tasks.whenAllComplete(tasks).addOnCompleteListener {
                     _fetchProductsListings.value = DataState.Success(productsList)
@@ -306,6 +405,174 @@ class ProfileRepository @Inject constructor(
             }
     }
 
+    fun fetchProductListings(currentUserUid: String,category: String) {
+        _fetchProductsListings.value = DataState.Loading
+        db.collectionGroup("products")
+            .whereEqualTo("inputproductCategory",category)
+            .orderBy("timestamp", Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProductsListings.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                if (value == null || value.isEmpty) {
+                    _fetchProductsListings.value = DataState.Success(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                for (data in value.documents) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        // Extract the user ID from the document path to determine the owner
+                        val docPath = data.reference.path
+                        val pathSegments = docPath.split("/")
+                        val userId = pathSegments[pathSegments.indexOf("users_products") + 1]
+
+                        // Skip products belonging to the current user
+                        if (userId != currentUserUid) {
+                            val task = db.collection("users").document(userId).get()
+                            tasks.add(task)
+
+                            task.addOnSuccessListener { documentSnapshot ->
+                                val user = documentSnapshot.toObject(ModelUser::class.java)
+                                if (user != null) {
+                                    val userName = user.fullName
+                                    val docId = data.id
+                                    product.docId = docId
+                                    product.user_ID = userId
+                                    product.productSellerName = userName
+                                    product.productImageName =
+                                        getImageNameFromUri(product.productImgeUri.toUri())
+                                    productsList.add(product)
+                                }
+                            }
+                        }
+                    }
+                }
+                // Wait for all tasks to complete
+                Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                    _fetchProductsListings.value = DataState.Success(productsList)
+                }
+            }
+    }
+
+    fun fetchProductListings(currentUserUid: String,category:String,orderOfPrice:String) {
+        var direction=Direction.DESCENDING
+        if (orderOfPrice.equals("asc")){
+            direction=Direction.ASCENDING
+        }
+        _fetchProductsListings.value = DataState.Loading
+        db.collectionGroup("products")
+            .whereEqualTo("inputproductCategory",category)
+            .orderBy("pricePerUnit" ,direction)
+            .orderBy("timestamp", Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProductsListings.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                if (value == null || value.isEmpty) {
+                    _fetchProductsListings.value = DataState.Success(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                for (data in value.documents) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        // Extract the user ID from the document path to determine the owner
+                        val docPath = data.reference.path
+                        val pathSegments = docPath.split("/")
+                        val userId = pathSegments[pathSegments.indexOf("users_products") + 1]
+
+                        // Skip products belonging to the current user
+                        if (userId != currentUserUid) {
+                            val task = db.collection("users").document(userId).get()
+                            tasks.add(task)
+
+                            task.addOnSuccessListener { documentSnapshot ->
+                                val user = documentSnapshot.toObject(ModelUser::class.java)
+                                if (user != null) {
+                                    val userName = user.fullName
+                                    val docId = data.id
+                                    product.docId = docId
+                                    product.user_ID = userId
+                                    product.productSellerName = userName
+                                    product.productImageName =
+                                        getImageNameFromUri(product.productImgeUri.toUri())
+                                    productsList.add(product)
+                                }
+                            }
+                        }
+                    }
+                }
+                // Wait for all tasks to complete
+                Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                    _fetchProductsListings.value = DataState.Success(productsList)
+                }
+            }
+    }
+
+    fun fetchProductListings(currentUserUid: String) {
+        _fetchProductsListings.value = DataState.Loading
+        db.collectionGroup("products")
+            .orderBy("timestamp", Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    _fetchProductsListings.value = DataState.Error(error.message!!)
+                    return@addSnapshotListener
+                }
+
+                if (value == null || value.isEmpty) {
+                    _fetchProductsListings.value = DataState.Success(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val productsList = mutableListOf<ProductModel>()
+                val tasks = mutableListOf<Task<DocumentSnapshot>>()
+
+                for (data in value.documents) {
+                    val product = data.toObject(ProductModel::class.java)
+                    if (product != null) {
+                        // Extract the user ID from the document path to determine the owner
+                        val docPath = data.reference.path
+                        val pathSegments = docPath.split("/")
+                        val userId = pathSegments[pathSegments.indexOf("users_products") + 1]
+
+                        // Skip products belonging to the current user
+                        if (userId != currentUserUid) {
+                            val task = db.collection("users").document(userId).get()
+                            tasks.add(task)
+
+                            task.addOnSuccessListener { documentSnapshot ->
+                                val user = documentSnapshot.toObject(ModelUser::class.java)
+                                if (user != null) {
+                                    val userName = user.fullName
+                                    val docId = data.id
+                                    product.docId = docId
+                                    product.user_ID = userId
+                                    product.productSellerName = userName
+                                    product.productImageName =
+                                        getImageNameFromUri(product.productImgeUri.toUri())
+                                    productsList.add(product)
+                                }
+                            }
+                        }
+                    }
+                }
+                // Wait for all tasks to complete
+                Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                    _fetchProductsListings.value = DataState.Success(productsList)
+                }
+            }
+    }
 
     fun uploadUpdateProductImage(uri: Uri, oldImageUri: Uri, product: ProductModel) {
         _porductPicUpdateStatus.value = DataState.Loading
@@ -445,6 +712,7 @@ class ProfileRepository @Inject constructor(
         _fetchCartProducts.value = DataState.Loading
 
         db.collection("products_at_cart").document(uid).collection("products")
+            .orderBy("timestamp" ,Direction.DESCENDING)
             .get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.isEmpty) {
@@ -530,6 +798,7 @@ class ProfileRepository @Inject constructor(
     fun fetchUserFormUserChatList() {
         _fetchUserFormUserChatList.value = DataState.Loading
         db.collection("Users_At_Chat").document(uid).collection("User")
+            .orderBy("smsTime", Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     _fetchUserFormUserChatList.value = DataState.Error(error.message!!)

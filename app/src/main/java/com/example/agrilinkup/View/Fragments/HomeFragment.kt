@@ -1,14 +1,21 @@
 package com.example.agrilinkup
 
 import android.content.Intent
+import com.example.agrilinkup.utils.KeyboardUtils
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -34,13 +41,16 @@ import com.example.agrilinkup.databinding.FragmentHomeBinding
 import com.example.agrilinkup.ui.ProfileRepository
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.Dialogs
+import com.example.agrilinkup.utils.KeyboardUtils.hideKeyboard
 import com.example.agrilinkup.utils.ProgressDialogUtil.dismissProgressDialog
 import com.example.agrilinkup.utils.ProgressDialogUtil.showProgressDialog
 import com.example.agrilinkup.utils.gone
 import com.example.agrilinkup.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.installations.Utils
 import com.google.firebase.storage.FirebaseStorage
+import java.util.Locale
 import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,6 +79,11 @@ class HomeFragment : Fragment() {
     lateinit var vmProfile:VmProfile
     lateinit var productsList:List<ProductModel>
     lateinit var product:ProductModel
+    lateinit var productAdapter:AdapterProductsListings
+     var productCategoryType:String=""
+     var orderOfPrice:String=""
+    var notSelectedproductCategory=false
+    var adapterPosition=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +101,10 @@ class HomeFragment : Fragment() {
         //val view=inflater.inflate(R.layout.fragment_home, container, false)
 
         binding= FragmentHomeBinding.inflate(inflater,container,false)
+
+
         auth= FirebaseModule_ProvideFirebaseAuthFactory.provideFirebaseAuth()
-         val view= binding.root
+        //val view= binding.root
         prefs= PreferenceManager(requireContext())
         val auth= FirebaseAuth.getInstance()
         val db= FirebaseFirestore.getInstance()
@@ -111,7 +128,7 @@ class HomeFragment : Fragment() {
         //navImage=view.findViewById(R.id.navHeaderImageView)
 
 
-        val toolbar=view.findViewById<Toolbar>(R.id.toolbar)
+        val toolbar=binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
         val toggleButton=ActionBarDrawerToggle(
@@ -124,18 +141,155 @@ class HomeFragment : Fragment() {
         binding.drawerlsyout.addDrawerListener(toggleButton)
         toggleButton.syncState()
 
-        //navImage=view.findViewById(R.id.navHeaderImageView)
 
 
-        return view
-    }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val inputProductcategories = arrayOf(
+            "Category",
+            "Grains - اناج" to "Anaj",
+            "Fruits - پھل" to "Phal",
+            "Vegetables - سبزیاں" to "Sabziyan",
+            "Legumes - دالیں " to "Daloon",
+            "Nuts and seeds - نٹس اور بیج" to "Nuts aur Beejon",
+            "Dairy products - دودھ کے پروڈکٹس" to "Doodh ke Products",
+            "Meat and poultry - گوشت اور پولیٹری" to "Gosht aur Poultry",
+            "Eggs - انڈے" to "Anday",
+            "Fiber crops - فائبر کپاس" to "Fiber Kapas",
+            "Spices and herbs - مصالحے اور جڑی بوٹیاں" to "Masalay aur Jari Botiyan",
+            "Beverages - مشروبات" to "Mashrobat",
+            "Oils - تیل" to "Teel"
+        )
+        val saveProductCategories= arrayOf(
+            "NotSelect",
+            "Grains", "Fruits", "Vegetables",
+            "Legumes", "Nuts__Seeds", "Dairy_products",
+            "Meat__Poultry", "Eggs","Fiber_crops",
+            "Spices_herbs","Beverages","Oils"
+        )
+        val filterProducts= arrayOf(
+            "Filter Products",
+            "Price: Low to High",
+            "Price: High to Low",
+            "Nearest"
+                )
+        if (binding.selectProductCategory!=null) {
+            var adapter1= ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,inputProductcategories)
+            binding.selectProductCategory.adapter = adapter1
+            1.also { binding.selectProductCategory.id = it }
+            binding.selectProductCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long){
+                    productCategoryType= saveProductCategories[position]
+
+                    when(position){
+                        0 -> {
+                            if(!orderOfPrice.isEmpty() && !orderOfPrice.equals("Filter Products") &&
+                                !orderOfPrice.equals("Nearest")) {
+
+                                if (orderOfPrice.equals("Price: Low to High")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"asc") }
+                                    setUpObserver()
+                                }
+                                else if (orderOfPrice.equals("Price: High to Low")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"desc") }
+                                    setUpObserver()
+                                }
+                            }
+                        }
+                        else -> {
+                            if(!orderOfPrice.isEmpty()) {
+
+                                if (orderOfPrice.equals("Price: Low to High")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId,productCategoryType,"asc") }
+
+                                    setUpObserver()
+                                }
+                                else if (orderOfPrice.equals("Price: High to Low")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId,productCategoryType,"desc") }
+                                    setUpObserver()
+                                }
+                            }
+                            else{
+                                prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId,productCategoryType) }
+                                setUpObserver()
+                            }
+                        }
+                    }
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    notSelectedproductCategory=true
+                }
+            }
+        }
+
+        if (binding.FilterProducts!=null) {
+            var adapter2= ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,filterProducts)
+            binding.FilterProducts.adapter = adapter2
+            1.also { binding.FilterProducts.id = it }
+            binding.FilterProducts.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long){
+                    orderOfPrice= filterProducts[position]
+                    when(position){
+                        1 -> {
+                            if(!productCategoryType.isEmpty()) {
+                                if (productCategoryType.equals("NotSelect")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId,productCategoryType,"asc") }
+                                    setUpObserver()
+                                }
+                                else {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"asc") }
+                                    setUpObserver()
+                                }
+                            }
+                            else{
+                                prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"asc") }
+                                setUpObserver()
+                            }
+                        }
+                        2 -> {
+                            if(!productCategoryType.isEmpty()) {
+                                if (!productCategoryType.equals("NotSelect")) {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings(it.docId,productCategoryType,"desc") }
+
+                                    setUpObserver()
+                                }
+                                else {
+                                    prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"desc") }
+                                    setUpObserver()
+                                }
+                            }
+                            else {
+                                prefs.getUserData()?.let { vmProfile.fetchProductsListings1(it.docId,"desc") }
+                                setUpObserver()
+                            }
+                        }
+                    }
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    orderOfPrice=filterProducts[0]
+                }
+            }
+        }
+
+
+
+
+
+        binding.txtSearchProducts.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString().lowercase(Locale.ROOT)
+                if (!productsList.isNullOrEmpty()) {
+                    val filteredList = productsList.filter {
+                        it.productTitle.lowercase(Locale.ROOT).contains(query)
+                    }
+                    productAdapter.updateList(filteredList)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         binding.navView.setNavigationItemSelectedListener { menuItem ->
-
 
             when (menuItem.itemId) {
 
@@ -161,6 +315,15 @@ class HomeFragment : Fragment() {
         }
         setUpProfileImage()
 
+
+        return binding.root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.addProductsListings.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment2_to_addProductListingFragment3)
         }
@@ -180,6 +343,23 @@ class HomeFragment : Fragment() {
 //                })
 //        )
     }
+
+
+//    al searchbar: EditText = view.findViewById(R.id.search_bar)
+//    searchbar.addTextChangedListener(object : TextWatcher {
+//        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//            val query = s.toString().toLowerCase()
+//            val filteredList = productList.filter {
+//                it.name.toLowerCase().contains(query)
+//            }
+//            adapter.updateList(filteredList)
+//        }
+//        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//        override fun afterTextChanged(s: Editable?) {}
+//    })
+
+    // Update the adapter's list
+
     private fun logout(): Boolean {
         Dialogs.logoutDialog(requireContext(), layoutInflater) {
             auth.signOut()
@@ -230,8 +410,9 @@ class HomeFragment : Fragment() {
                     productsList = it.data!!
                     if (!productsList.isNullOrEmpty()) {
                         val navigater=findNavController()
-                        binding.recyclerView.adapter = AdapterProductsListings(productsList,requireContext(),
+                        productAdapter=AdapterProductsListings(productsList,requireContext(),
                             navigater,viewLifecycleOwner,childFragmentManager)
+                        binding.recyclerView.adapter = productAdapter
                     }
 //                    else {
 //                        binding.lyNoCars.visible()
@@ -241,6 +422,8 @@ class HomeFragment : Fragment() {
                 }
 
                 is DataState.Error -> {
+//                    binding.txtHomeError.visibility=View.VISIBLE
+//                    binding.txtHomeError.text=it.errorMessage
                     toast(it.errorMessage)
                     dismissProgressDialog()
                 }

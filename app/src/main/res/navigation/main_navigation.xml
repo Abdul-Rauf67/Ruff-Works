@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_userProductsFragment2_to_updateMyProductFragment"
             app:destination="@id/updateMyProductFragment" />
+        <action
+            android:id="@+id/action_userProductsFragment2_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment3"
@@ -79,6 +82,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_messagesChatFragment"
             app:destination="@id/messagesChatFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_updateMyProductFragment"
+            app:destination="@id/updateMyProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/messagesChatFragment"
