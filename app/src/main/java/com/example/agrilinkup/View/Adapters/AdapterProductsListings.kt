@@ -118,12 +118,12 @@ class AdapterProductsListings(private var items: List<ProductModel>,
                 navigator.navigate(R.id.action_mainFragment2_to_productDetailsFragment)
             })
 
-            binding.addToCart.setOnClickListener{
-                addToCart(product)
-            }
-            binding.gotoInbox.setOnClickListener {
-                addChatUserAtUserChatList(product)
-            }
+//            binding.addToCart.setOnClickListener{
+//                addToCart(product)
+//            }
+//            binding.gotoInbox.setOnClickListener {
+//                addChatUserAtUserChatList(product)
+//            }
 
 //            deleteProduct(product.docId)
 //            updateProduct(product.docId)

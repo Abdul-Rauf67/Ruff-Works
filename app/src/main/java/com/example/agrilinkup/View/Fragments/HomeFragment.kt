@@ -278,7 +278,7 @@ class HomeFragment : Fragment() {
         binding.txtSearchProducts.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().lowercase(Locale.ROOT)
-                if (!productsList.isEmpty()) {
+                if (!productsList.isNullOrEmpty()) {
                     val filteredList = productsList.filter {
                         it.productTitle.lowercase(Locale.ROOT).contains(query)
                     }

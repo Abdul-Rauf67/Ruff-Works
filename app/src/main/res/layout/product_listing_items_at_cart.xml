@@ -32,6 +32,8 @@
                 >
 
                 <ImageView
+                    android:scaleType="fitXY"
+                    android:background="@drawable/rounded_corner"
                     android:id="@+id/imgItemProductThumb"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
