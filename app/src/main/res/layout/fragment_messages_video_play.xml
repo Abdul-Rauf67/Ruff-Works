@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:paddingVertical="@dimen/_20sdp"
         android:background="@color/white"
-        tools:context="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesVideoPlayFragment">
+        tools:context=".view.messages.video_image_viewer.MessagesVideoPlayFragment">
 
         <ImageView
             android:id="@+id/backArrow"

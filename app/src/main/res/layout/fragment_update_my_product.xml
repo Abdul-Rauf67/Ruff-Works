@@ -8,7 +8,7 @@
     </data>
 
     <FrameLayout
-        tools:context=".View.Fragments.UserAccount.UpdateMyProductFragment"
+        tools:context=".view.fragments.UserAccount.UpdateMyProductFragment"
         android:id="@+id/fragmentAddProdusts_Container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,7 +17,7 @@
             android:id="@+id/fragmentAddProductListing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".View.Fragments.AddProductListingFragment"
+            tools:context=".view.fragments.AddProductListingFragment"
             android:orientation="vertical"
             android:layout_margin="@dimen/fragment_horizontal_margin">
 

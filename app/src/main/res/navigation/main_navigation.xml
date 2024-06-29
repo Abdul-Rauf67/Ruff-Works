@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/chat_Messages_Fragment2"
-        android:name="com.example.agrilinkup.View.Fragments.Chat_Messages_Fragment"
+        android:name="com.example.agrilinkup.view.fragments.ChatMessagesFragment"
         android:label="Chat_Messages_Fragment" />
     <fragment
         android:id="@+id/userOrdersFragment2"
-        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UserOrdersFragment"
+        android:name="com.example.agrilinkup.view.fragments.UserAccount.UserOrdersFragment"
         android:label="UserOrdersFragment" />
     <fragment
         android:id="@+id/userProductsFragment2"
-        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UserProductsFragment"
+        android:name="com.example.agrilinkup.view.fragments.UserAccount.UserProductsFragment"
         android:label="UserProductsFragment" >
         <action
             android:id="@+id/action_userProductsFragment2_to_addProductListingFragment3"
@@ -29,15 +29,15 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment3"
-        android:name="com.example.agrilinkup.View.Fragments.UserAccount.ProfileFragment"
+        android:name="com.example.agrilinkup.view.fragments.UserAccount.ProfileFragment"
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/addProductListingFragment3"
-        android:name="com.example.agrilinkup.View.Fragments.AddProductListingFragment"
+        android:name="com.example.agrilinkup.view.fragments.AddProductListingFragment"
         android:label="AddProductListingFragment" />
     <fragment
         android:id="@+id/mainFragment2"
-        android:name="com.example.agrilinkup.View.Fragments.MainFragment"
+        android:name="com.example.agrilinkup.view.fragments.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment2_to_profileFragment3"
@@ -66,17 +66,17 @@
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment"
-        android:name="com.example.agrilinkup.View.Fragments.UserAccount.updateProfileFragment"
+        android:name="com.example.agrilinkup.view.fragments.UserAccount.updateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
     <fragment
         android:id="@+id/updateMyProductFragment"
-        android:name="com.example.agrilinkup.View.Fragments.UserAccount.UpdateMyProductFragment"
+        android:name="com.example.agrilinkup.view.fragments.UserAccount.UpdateMyProductFragment"
         android:label="fragment_update_my_product"
         tools:layout="@layout/fragment_update_my_product" />
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.example.agrilinkup.View.Fragments.HomeProduct.ProductDetailsFragment"
+        android:name="com.example.agrilinkup.view.fragments.HomeProduct.ProductDetailsFragment"
         android:label="fragment_product_details"
         tools:layout="@layout/fragment_product_details" >
         <action
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/messagesChatFragment"
-        android:name="com.example.flame.ui.fragments.messages.chat.MessagesChatFragment"
+        android:name="com.example.agrilinkup.view.messages.chat.MessagesChatFragment"
         android:label="MessagesChatFragment" >
         <action
             android:id="@+id/action_messagesChatFragment_to_messagesImageViewerFragment"
@@ -103,6 +103,6 @@
         android:label="MessagesImageViewerFragment" />
     <fragment
         android:id="@+id/messagesVideoPlayFragment"
-        android:name="com.example.flame.ui.fragments.messages.video_image_viewer.MessagesVideoPlayFragment"
+        android:name="com.example.agrilinkup.view.messages.video_image_viewer.MessagesVideoPlayFragment"
         android:label="MessagesVideoPlayFragment" />
 </navigation>
