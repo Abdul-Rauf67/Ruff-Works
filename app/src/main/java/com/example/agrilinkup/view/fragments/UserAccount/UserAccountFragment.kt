@@ -14,8 +14,10 @@ import com.example.agrilinkup.databinding.FragmentUserAccountBinding
 import com.example.agrilinkup.utils.BackPressedExtensions.goBackPressed
 import com.example.agrilinkup.utils.Dialogs
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class UserAccountFragment : Fragment() {
 
     private lateinit var binding:FragmentUserAccountBinding

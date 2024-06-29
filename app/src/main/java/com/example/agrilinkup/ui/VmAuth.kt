@@ -1,6 +1,5 @@
 package com.example.agrilinkup.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -18,12 +17,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
+@HiltViewModel
 class VmAuth @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
