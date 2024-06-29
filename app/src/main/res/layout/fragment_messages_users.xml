@@ -37,7 +37,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            tools:context="com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment">
+            tools:context=".view.messages.userlist.MessagesUserListFragment">
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerLayout"

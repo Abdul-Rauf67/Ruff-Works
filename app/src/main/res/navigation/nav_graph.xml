@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.agrilinkup.HomeFragment"
+        android:name="com.example.agrilinkup.view.fragments.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_addProductListingFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/addProductListingFragment"
-        android:name="com.example.agrilinkup.View.Fragments.AddProductListingFragment"
+        android:name="com.example.agrilinkup.view.fragments.AddProductListingFragment"
         android:label="fragment_add_product_listing"
         tools:layout="@layout/fragment_add_product_listing" >
         <action

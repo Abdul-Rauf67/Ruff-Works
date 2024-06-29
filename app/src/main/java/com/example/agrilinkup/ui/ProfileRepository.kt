@@ -1,6 +1,5 @@
 package com.example.agrilinkup.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -16,7 +15,6 @@ import com.example.agrilinkup.Models.Entities.messages.ChatUserListDataModel
 import com.example.agrilinkup.Models.PreferenceManager
 import com.example.agrilinkup.utils.DataState
 import com.example.agrilinkup.utils.ImageUtils
-import com.example.flame.ui.fragments.messages.userlist.MessagesUserListFragment
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -25,9 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
-import java.sql.Date
-import java.sql.Timestamp
 import javax.inject.Inject
 
 class ProfileRepository @Inject constructor(
@@ -520,7 +515,7 @@ class ProfileRepository @Inject constructor(
             }
     }
 
-    fun fetchProductListings(currentUserUid: String) {
+    fun fetchProductListings() {
         _fetchProductsListings.value = DataState.Loading
         db.collectionGroup("products")
             .orderBy("timestamp", Direction.DESCENDING)
@@ -547,7 +542,7 @@ class ProfileRepository @Inject constructor(
                         val userId = pathSegments[pathSegments.indexOf("users_products") + 1]
 
                         // Skip products belonging to the current user
-                        if (userId != currentUserUid) {
+                        if (userId != auth.currentUser?.uid) {
                             val task = db.collection("users").document(userId).get()
                             tasks.add(task)
 

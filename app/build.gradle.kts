@@ -1,10 +1,10 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("com.google.dagger.hilt.android")
-    id ("com.google.devtools.ksp")
-    id ("kotlin-parcelize")
-    id ("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
+    id("com.google.gms.google-services")
     id("kotlin-android")
     id("kotlin-kapt")
 
@@ -23,18 +23,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures{
-        dataBinding=true
+    buildFeatures {
+        dataBinding = true
         viewBinding = true
     }
-
-        // Configure Dagger Hilt options for annotation processing
-//        kapt {
-//            useBuildCache = true
-//            correctErrorTypes = true
-//        }
-
-
 
     buildTypes {
         release {
@@ -51,22 +43,16 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-
-//        freeCompilerArgs += "-P"
-//        freeCompilerArgs += "disableIncProcessor=true"
-
-//        freeCompilerArgs += [
-//            "-Xopt-in=kotlin.RequiresOptIn",
-//            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-//            "-Xopt-in=kotlinx.coroutines.FlowPreview"
-//        ]
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     //for firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
@@ -82,28 +68,27 @@ dependencies {
     // image picker
     //implementation ("com.github.Dhaval2404:ImagePicker:v2.1")
     implementation("com.github.dhaval2404:imagepicker:2.1")
-    implementation("androidx.activity:activity:1.9.0")
-    implementation("androidx.compose.foundation:foundation-android:1.6.7")
-    implementation("androidx.compose.foundation:foundation-layout-android:1.6.7")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("androidx.compose.foundation:foundation-android:1.6.8")
+    implementation("androidx.compose.foundation:foundation-layout-android:1.6.8")
 
     //navigation components
     val nav_version = "2.7.7"
-    implementation( "androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation ("androidx.navigation:navigation-ui-ktx:$nav_version")
-
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
 
     //lifeCycle
-    val lifecycle_version = "2.8.1"
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
-    implementation( "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    val lifecycle_version = "2.8.2"
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
 
     //hilt
-   // implementation("dagger.hilt:hilt-lifecycle-viewmodel")
-    implementation ("com.google.dagger:hilt-android:2.50")
-    ksp ("com.google.dagger:hilt-compiler:2.50")
+    // implementation("dagger.hilt:hilt-lifecycle-viewmodel")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
 
     //Responsiveness
     implementation("com.intuit.ssp:ssp-android:1.1.0")
@@ -114,21 +99,18 @@ dependencies {
 
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     //Country code picker
     implementation("com.hbb20:ccp:2.7.3")
 
-    //Image Picker
-    //implementation ("com.github.dhaval2404:image-picker:2.1")
-
     //Circle image view
-    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("com.airbnb.android:lottie:6.4.0")
 
     //Gson
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     //Shimmer effect
     implementation("com.facebook.shimmer:shimmer:0.5.0")
@@ -140,10 +122,10 @@ dependencies {
     implementation("com.github.3llomi:RecordView:3.1.3")
 
     //Dots Indicator for Viewpager + Recyclerview
-    implementation ("me.relex:circleindicator:2.1.6")
+    implementation("me.relex:circleindicator:2.1.6")
 
     //Carousel recycler view
-    implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
+    implementation("com.github.sparrow007:carouselrecyclerview:1.2.6")
 
 
     implementation("androidx.core:core-ktx:1.13.1")
@@ -151,15 +133,15 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("androidx.fragment:fragment-ktx:1.8.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
     implementation("com.google.android.gms:play-services-cast-framework:21.5.0")
     testImplementation("junit:junit:4.13.2")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
